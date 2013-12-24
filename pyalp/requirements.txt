@@ -1,0 +1,16 @@
+#ipython
+pudb
+#flake8
+Django
+psycopg2
+django-configurations
+raven
+WebTest
+django-webtest
+model-mommy
+django-jenkins
+django-debug-toolbar
+django-model-utils
+django-redis-cache
+hiredis
+django-floppyforms
