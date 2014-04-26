@@ -1,0 +1,13 @@
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+    {% for mod in get_modules %}
+        {{ mod.display_module }}
+    {% endfor %}
+
+    {% if side != 'main' %}
+        <tr>
+            <td>{% spacer skin.container.horizontalpadding %}</td>
+            <td width="{{ width_modules }}">{% spacer width_modules }}</td>
+            <td>{% spacer skin.container.horizontalpadding %}</td>
+        </tr>
+    {% endif %}
+</table>

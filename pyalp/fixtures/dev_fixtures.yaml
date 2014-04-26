@@ -1,0 +1,31 @@
+- model: pizza.Pizza
+  pk: 1
+  fields:
+    pizza: Peperoni
+    description: Lennon
+    price: 10.00
+    enabled: true
+
+- model: pizza.Pizza
+  pk: 2
+  fields:
+    pizza: Paul
+    description: McCartney
+    price: 10.00
+    enabled: true
+
+
+- model: auth.user
+  pk: 50
+  fields:
+    first_name: John
+    last_name: Jones
+
+
+
+- model: pizza.PizzaOrder
+  pk: 1
+  fields:
+    pizza: 1
+    orderer: 1
+    quantity: 400

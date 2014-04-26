@@ -5,6 +5,26 @@ PROJECT_ROOT = dirname(dirname(abspath(__file__)))
 PROJECT_NAME = 'pyalp'
 
 
+class InvalidVarException(object):
+    def __mod__(self, missing):
+        try:
+            missing_str = str(missing)
+        except:
+            missing_str = 'failed to create string representation'
+
+        raise Exception('Unknown template variable %r %s' % (
+            missing, missing_str
+        ))
+
+    def __contains__(self, search):
+        if search == '%s':
+            return True
+        return False
+
+    def __str__(self):
+        return ''
+
+
 class RedisCache(object):
     CACHES = {
         'default': {
@@ -25,6 +45,8 @@ class Common(Configuration):
 
     MANAGERS = ADMINS
 
+    SITE_ID = 'pyalp'
+
     # SECURITY WARNING: keep the secret key used in production secret!
     SECRET_KEY = 'randomstring'
 
@@ -32,19 +54,60 @@ class Common(Configuration):
     DEBUG = True
 
     TEMPLATE_DEBUG = True
+    TEMPLATE_STRING_IF_INVALID = InvalidVarException()
+    TEMPLATE_LOADERS = [
+        'django.template.loaders.filesystem.Loader',
+        'django.template.loaders.app_directories.Loader',
+        'skins.skin_template_loader.Loader'
+    ]
+    TEMPLATE_CONTEXT_PROCESSORS = [
+        "django.contrib.auth.context_processors.auth",
+        "django.core.context_processors.debug",
+        "django.core.context_processors.i18n",
+        "django.core.context_processors.media",
+        "django.core.context_processors.static",
+        "django.core.context_processors.tz",
+        "django.contrib.messages.context_processors.messages",
+
+        "pyalp.contexts.app_name",
+        "pyalp.contexts.url_name",
+        "pyalp.contexts.skin",
+        "pyalp.contexts.modules",
+        "pyalp.contexts.lan"
+    ]
     ALLOWED_HOSTS = []
 
     INSTALLED_APPS = [
         'django.contrib.admin',
+        'django.contrib.admindocs',
         'django.contrib.auth',
         'django.contrib.contenttypes',
         'django.contrib.sessions',
         'django.contrib.messages',
         'django.contrib.staticfiles',
         'django_jenkins',
-        'raven.contrib.django.raven_compat',
-        'debug_toolbar',
+        'django_extensions',
+        # 'raven.contrib.django.raven_compat',
+        # 'debug_toolbar',
         'floppyforms',
+        'south',
+        'chosen',
+        'jsonify',
+        'pipeline',
+
+        # pyalp plugins
+        'pyalp_translation',
+        'custom_template_tags',
+        'pyalp_page',
+        'listjs',
+
+        # pyalp apps
+        'common',
+        'pizza',
+        'flags',
+        'skins',
+        'cl_module',
+        'tournaments'
     ]
 
     MIDDLEWARE_CLASSES = [
@@ -54,7 +117,7 @@ class Common(Configuration):
         'django.contrib.auth.middleware.AuthenticationMiddleware',
         'django.contrib.messages.middleware.MessageMiddleware',
         'django.middleware.clickjacking.XFrameOptionsMiddleware',
-        'debug_toolbar.middleware.DebugToolbarMiddleware',
+        # 'debug_toolbar.middleware.DebugToolbarMiddleware'
     ]
 
     ROOT_URLCONF = 'pyalp.urls'
@@ -63,7 +126,8 @@ class Common(Configuration):
 
     # Database
     # https://docs.djangoproject.com/en//ref/settings/#databases
-    # http://django-configurations.readthedocs.org/en/latest/values/#configurations.values.DatabaseURLValue
+    # http://django-configurations.readthedocs.org/en/latest/values/
+    # #configurations.values.DatabaseURLValue
 
     DATABASES = {
         'default': {
@@ -90,6 +154,14 @@ class Common(Configuration):
 
     STATIC_URL = '/static/'
     STATIC_ROOT = join(PROJECT_ROOT, 'static_root')
+    STATICFILES_FINDERS = (
+        "django.contrib.staticfiles.finders.FileSystemFinder",
+        "django.contrib.staticfiles.finders.AppDirectoriesFinder",
+        "skins.skin_staticfile_finder.SkinStaticFileFinder"
+        # "skins.skin_cssfile_finder.SkinCSSFileFinder"
+    )
+    PIPELINE_COMPILERS = 'skins.skin_cssfile_compiler.SkinCSSFileCompiler'
+    STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
 
     MEDIA_URL = '/media/'
     MEDIA_ROOT = join(PROJECT_ROOT, 'media')
@@ -100,8 +172,9 @@ class Common(Configuration):
     ]
 
     TEMPLATE_DIRS = [
-        join(PROJECT_ROOT, 'templates')
+        join(PROJECT_ROOT, 'templates'),
     ]
+    SKIN_DIR = join(PROJECT_ROOT, 'skins', 'skins')
 
     FIXTURE_DIRS = [
         join(PROJECT_ROOT, 'fixtures')
@@ -118,7 +191,10 @@ class Common(Configuration):
 
     # django-debug-toolbar
     DEBUG_TOOLBAR_CONFIG = {'INTERCEPT_REDIRECTS': False}
-    INTERNAL_IPS = ('127.0.0.1',)
+    INTERNAL_IPS = ('127.0.0.1', 'warbell', '10.0.0.4', '::2')
+
+    ALP_TOURNAMENT_MODE = False
+    ALP_TOURNAMENT_MODE_COMPUTER_GAMES = False
 
 
 class Dev(Common):
@@ -126,6 +202,21 @@ class Dev(Common):
     TEMPLATE_DEBUG = DEBUG
     EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
     EMAIL_FILE_PATH = '/tmp/app-emails'
+
+
+class DevPostgres(Dev):
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'pyalp_db',
+            'USER': 'pyalp',
+            'PASSWORD': 'pass',
+            'HOST': 'localhost',
+            'OPTIONS': {
+                'autocommit': True
+            }
+        }
+    }
 
 
 class Deployed(RedisCache, Common):
@@ -136,6 +227,8 @@ class Deployed(RedisCache, Common):
     STATIC_ROOT = join(PUBLIC_ROOT, 'static')
     MEDIA_ROOT = join(PUBLIC_ROOT, 'media')
     COMPRESS_OUTPUT_DIR = ''
+
+    # SESSION_ENGINE = 'redis_sessions.session'
 
     EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
     EMAIL_HOST = 'smtp.sendgrid.net'
@@ -148,6 +241,9 @@ class Deployed(RedisCache, Common):
 
 
 class Stage(Deployed):
+    # see https://docs.djangoproject.com/en/dev/ref/databases/#autocommit-mode
+    # about autocommit
+
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -156,7 +252,7 @@ class Stage(Deployed):
             'PASSWORD': '',
             'HOST': 'localhost',
             'OPTIONS': {
-                'autocommit': True,  # see https://docs.djangoproject.com/en/dev/ref/databases/#autocommit-mode
+                'autocommit': True
             }
         }
     }
@@ -166,6 +262,9 @@ class Prod(Deployed):
     DEBUG = False
     TEMPLATE_DEBUG = DEBUG
 
+    # see https://docs.djangoproject.com/en/dev/ref/databases/#autocommit-mode
+    # about autocommit
+
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -174,7 +273,7 @@ class Prod(Deployed):
             'PASSWORD': '',
             'HOST': 'localhost',
             'OPTIONS': {
-                'autocommit': True,  # see https://docs.djangoproject.com/en/dev/ref/databases/#autocommit-mode
+                'autocommit': True
             }
         }
     }

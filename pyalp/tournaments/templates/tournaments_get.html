@@ -1,0 +1,490 @@
+{% extends "base.html" %}
+{% block context %}
+
+{% if tournaments %}
+    {% include ('include/tournaments/scoring_' + tournament.ttype + '.php' %}
+
+    <strong>tournaments</strong>: {{ tournament.name }} <font class="sm">[<a href="tournaments.php">back to all tournaments</a>]</font><br />
+
+    <br />
+    <table border="0" cellpadding="4" width="100%" bgcolor="{{ skin.colors.cell_title }}">
+        <tr>
+            <td>
+                <font class="tourneytitle">
+                    {{ tournament.name }}
+                </font>
+                <br />
+            </td>
+        </tr>
+    </table>
+    <br />
+
+    <table border="0" cellpadding="4" width="100%">
+    <tr>
+        <td width="50%" valign="top">
+            {% start_module %}
+
+            <font class="sm">
+            {% if not ALP_TOURNAMENT_MODE or ALP_TOURNAMENT_MODE_COMPUTER_GAMES %}
+                <strong>{{ game.name }}</strong>
+                <?php
+                echo (!empty($game['current_version'])?$game['current_version']:'')
+                ?>
+
+                <font color="{{ skin.colors.blended_text }}">
+                    (!empty($game['url_update'])?" &nbsp;&nbsp;[<a href=\"".$game['url_update']."\"><font color=\"".$colors['blended_text']."\">update</font></a>]":"")
+                    (!empty($game['url_maps'])?" &nbsp;&nbsp;[<a href=\"".$game['url_maps']."\"><font color=\"".$colors["blended_text"]."\">maps</font></a>]":"")
+                </font>
+                <br />
+            {% endif %}
+
+            <strong>
+                {% if tournament.random %}
+                    random
+                {% endif %}
+                {{ tournament_types[$tournament['ttype']][0]; }}
+            </strong>
+
+            {$ if tournament.marathon %}
+                <font class="sm" color="<?php echo $colors['primary']; ?>">
+                    <strong>*</strong>
+                    <a href="themarathon.php" style="color: <?php echo $colors['primary']; ?>">
+                        marathon
+                    </a>
+                </font>
+            {% endif %}
+            tournament
+            <br />
+                }
+            {% spacer 1 8 1 %}
+            <font color="<?php echo $colors['blended_text']; ?>"><strong>tournament status</strong>: <?php echo ($tournament["lockstart"]?(!empty($top_four[0])>0?'finished.':'currently in progress.'):'waiting to start.'); ?></font></font><br />
+            {% end_module %}
+            {% spacer 1 4 1 %}
+            {% start_module %}
+            {% skin.get_arrow %}
+            &nbsp;
+            <a href="disp_teams.php?id=<?php echo $tournament['tourneyid']; ?>">
+                <strong>
+                    <?php echo $txt; ?>
+                </strong>
+            </a>: {{ team_num }}
+            ($tournament["max_teams"]>0?" / ".$tournament['max_teams']:'')
+            <br />
+            {% spacer 1 4 1 %}
+            {% skin.get_arrow %}
+            &nbsp;
+            {% if tournament.lockstart %}
+                <a href="{{ link }}">
+            {% else %}
+                <font color="{{ skin.colors.blended_text }}">
+            {% endif %}
+            <strong>standings</strong>
+            {% if tournament.lockstart %}
+                </a>
+            {% else %}
+                </font>
+            {% endif %}
+            <br />
+            {% spacer 1 4 1 %}
+            {% if not ALP_TOURNAMENT_MODE %}
+                {% skin.get_arrow %}
+                &nbsp;
+                {% if mapvote %}
+                    <a href="maps.php?id=<?php echo $tournament['tourneyid']; ?>">
+                {% else %}
+                    <font color="<?php echo $colors['blended_text']; ?>">
+                {% endif %}
+                <strong>map voting</strong>
+                {% if mapvote %}
+                    </a>
+                {% else %}
+                    </font>
+                {% endif %}
+
+                {% adminlink 'admin_mapvoting.php?id=' + tournament.tourneyid %}
+
+                <br />
+                {% spacer 1 4 1 %}
+                {% skin.get_arrow %}
+                &nbsp;
+                {% if tournament.url_stats %}
+                    <a href="{{ tournament.url_stats }}">
+                {% else %}
+                    <font color="{{ skin.colors.blended_text }}">
+                {% endif %}
+                <strong>statistics</strong>
+                {% tournament.url_stats %}
+                    </a>
+                {% else %}
+                    </font>
+                {% endif %}
+                <br />
+            {% endif %}
+
+
+            <!--
+            Disable admin_disp_tournaments for now
+            {% if tournament_is_secure(tournament.tourneyid) and not ALP_TOURNAMENT_MODE %}
+                {% spacer 1 4 1 %}
+                {% skin.get_arrow %}
+                &nbsp;
+                {% if tournament.lockstart %}
+                    <a href="admin_disp_tournament.php?id={{ tournament.tourneyid }}">
+                {% else %}
+                    <font color="{{ skin.colors.blended_text }}">
+                }
+                <strong>admin</strong>
+                if tournament.lockstart %}
+                    </a>
+                {% else %}
+                    </font>
+                {% endif %}
+                <br />
+            {% endif %}
+            -->
+
+            {% end_module %}
+            {% if current_security_level() >= 1 and not ALP_TOURNAMENT_MODE %}
+                {% spacer 1 4 1 %}
+                {% start_module %}
+                <font class="sm">
+                    <strong>
+                        user control panel
+                    </strong>
+                    <br />
+                </font>
+                {% spacer 1 4 1 %}
+                {% if not tournament.lockstart %}
+                    $locked = "<font color=\"".$colors['blended_text']."\"><strong>locked.</strong></font><br />";
+                    <!-- assumptions: tournament hasn't already started and user has already logged in. -->
+                    $is_playing = $dbc->query("SELECT * FROM tournament_players WHERE tourneyid='".$tournament['tourneyid']."' AND userid='".$_COOKIE['userid']."'");
+                    $is_playing = $is_playing->numRows();
+                    $is_captain = $dbc->query("SELECT * FROM tournament_teams WHERE tourneyid='".$tournament['tourneyid']."' AND captainid='".$_COOKIE['userid']."'");
+                    $is_captain = $is_captain->numRows();
+                    $is_teams = $dbc->query("SELECT * FROM tournament_teams WHERE tourneyid='".$tournament['tourneyid']."'");
+                    $is_teams = $is_teams->numRows();
+                    // display current team info? if($is_playing and $tournament["per_team"]>1 and !$tournament["random"]) $team_info = $dbc->database_fetch_assoc($dbc->database_query
+
+                    if ($tournament['lockjoin']) {
+                        echo $locked;
+                    } elseif ($tournament['lockteams'] and !$tournament['lockjoin']) {
+                        if ($tournament['per_team']==1||$tournament['random']) {
+                            echo $locked;
+                        } else {
+                            $bool = false;
+                            if (!$is_playing and !$is_captain and $is_teams) {
+                                get_arrow();
+                                echo "&nbsp;<a href=\"disp_teams.php?id=".$tournament['tourneyid']."\"><strong>join a team</strong></a><br />";
+                                spacer(1,4,1);
+                                $bool = true;
+                            } elseif ($is_playing and !$is_captain) {
+                                get_arrow();
+                                echo "&nbsp;<a href=\"disp_teams.php?id=".$tournament["tourneyid"]."\"><strong>join a new team</strong></a></strong><br />";
+                                spacer(1,4,1);
+                                $bool = true;
+                            } elseif ($is_playing and $is_captain) {
+                                get_arrow();
+                                echo "&nbsp;<a href=\"disp_teams.php?id=".$tournament['tourneyid']."\"><strong>modify your team</strong></a><br />";
+                                spacer(1,4,1);
+                                $bool = true;
+                            }
+                            if (!$is_captain and !$is_playing) {
+                                get_arrow();
+                                echo "&nbsp;<a href=\"chng_update_teams.php?id=".$tournament['tourneyid']."&act=add&u=1\"><strong>pug</strong></a><br />";
+                                spacer(1,4,1);
+                                $bool = true;
+                            } elseif (!$is_captain) {
+                                get_arrow();
+                                echo "&nbsp;<a href=\"chng_update_teams.php?id=".$tournament['tourneyid']."&act=del\"><strong>withdraw from tournament</strong></a><br />";
+                                spacer(1,4,1);
+                                $bool = true;
+                            }
+                            if (!$bool) echo "<font color=\"".$colors['blended_text']."\">none.</font>";
+                        }
+                    } elseif (!$tournament['lockteams'] and !$tournament['lockjoin']) {
+                        $under_limit = is_under_max_teams($tournament['tourneyid']);
+                        if (!$under_limit) {
+                            get_arrow();
+                            echo "&nbsp;<font color=\"".$colors['blended_text']."\">maximum ".get_what_teams_called($tournament['tourneyid'],0)." limit reached.</font><br />";
+                        }
+                        if ($tournament['per_team']==1||$tournament['random']) {
+                            if (!$is_playing) {
+                                if ($under_limit) {
+                                    get_arrow();
+                                    echo "&nbsp;<a href=\"chng_update_teams.php?id=".$tournament['tourneyid']."&act=add\"><strong>join this tournament</strong></a><br />";
+                                }
+                            } else {
+                                get_arrow();
+                                echo "&nbsp;<a href=\"chng_update_teams.php?id=".$tournament['tourneyid']."&act=del\"><strong>withdraw from tournament</strong></a><br />";
+                            }
+                            spacer(1,4,1);
+                        } else {
+                            $bool = false;
+                            if (!$is_playing and !$is_teams) {
+                                if ($under_limit) {
+                                    get_arrow();
+                                    echo "&nbsp;<a href=\"chng_teams.php?id=".$tournament['tourneyid']."\"><strong>create team</strong></a><br />";
+                                    spacer(1,4,1);
+                                    $bool = true;
+                                }
+                            } elseif ((!$is_playing and $is_teams)||($is_playing and $is_teams and !$is_captain)) {
+                                get_arrow();
+                                echo "&nbsp;<a href=\"disp_teams.php?id=".$tournament['tourneyid']."\"><strong>join a ".($is_playing and $is_teams and !$is_captain?'new ':'').'team</a></strong><br />';
+                                spacer(1,4,1);
+                                if($under_limit) {
+                                    get_arrow();
+                                    echo "&nbsp;<strong><a href=\"chng_teams.php?id=".$tournament['tourneyid']."\">create a ".($is_playing and $is_teams and !$is_captain?'new ':'').'team</strong></a><br />';
+                                    spacer(1,4,1);
+                                }
+                                $bool = true;
+                            } elseif ($is_playing and $is_teams and $is_captain) {
+                                get_arrow();
+                                echo "&nbsp;<a href=\"disp_teams.php?id=".$tournament['tourneyid']."\"><strong>modify your team</strong></a><br />";
+                                spacer(1,4,1);
+                                $bool = true;
+                            }
+                            if (!$is_captain and !$is_playing) {
+                                get_arrow();
+                                echo "&nbsp;<a href=\"chng_update_teams.php?id=".$tournament['tourneyid']."&act=add&u=1\"><strong>pug</strong></a><br />";
+                                spacer(1,4,1);
+                                $bool = true;
+                            } elseif(!$is_captain) {
+                                get_arrow();
+                                echo "&nbsp;<a href=\"chng_update_teams.php?id=".$tournament['tourneyid']."&act=del\"><strong>withdraw from tournament</strong></a><br />";
+                                spacer(1,4,1);
+                                $bool = true;
+                            }
+                            if(!$bool) echo "<font color=\"".$colors['blended_text']."\">none.</font>";
+                        }
+                    } ?>
+                    </div>
+                    <?php
+                } elseif ($tournament['per_team']>1 and $tournament['random'] and $tournament['lockstart']) {
+                    // tournament has already started and is random.
+                    if ($is_playing and $is_captain) {
+                        get_arrow();
+                        echo "&nbsp;<a href=\"disp_teams.php?id=".$tournament['tourneyid']."\"><strong>modify your team</strong></a><br />";
+                        spacer(1,4,1);
+                    }
+                }
+                end_module();
+            } ?>
+            <br />
+            <?php
+            if (!empty($top_four[0])) {
+                dotted_line(0,4); ?>
+                <strong>results</strong>:<br />
+                <?php dotted_line(); ?>
+                <table border="0" width="100%">
+                    <tr>
+                    <td><strong>1st</strong>:
+                        <?php
+                        if ($tournament['per_team']==1) { ?>
+                            <br /><?php
+                            $player = $dbc->queryOne('SELECT username FROM users WHERE userid='.(int)$top_four[0]);
+                             ?>&nbsp;<font color="<?php echo $colors['blended_text']; ?>"><strong><?php echo $player; ?></strong><br /></font><?php
+                        } else {
+                            $team_data = $dbc->queryOne('SELECT name FROM tournament_teams WHERE id = '.(int)$top_four[0]);
+                            if(!ALP_TOURNAMENT_MODE) $player_data = $dbc->query('SELECT tournament_players.userid as userid,users.username AS username
+                                                        FROM tournament_players LEFT JOIN users USING (userid)
+                                                        WHERE tournament_players.tourneyid='.(int)$tournament['tourneyid'].'
+                                                        AND tournament_players.teamid='.(int)$top_four[0].' ORDER BY username');
+                            echo $team_data; ?><br />
+                            <?php
+                            if(!ALP_TOURNAMENT_MODE) {
+                                while($player = $player_data->fetchRow()) { ?>
+                                    <?php spacer(16); ?>&nbsp;<a href="disp_users.php?id=<?php echo $player['userid']; ?>" style="color: <?php echo $colors["blended_text"]; ?>"><?php echo $player["username"]; ?></a><br /><?php
+                                }
+                            }
+                        } spacer(1,6,1);?></td>
+                    </tr>
+                    <?php
+                    if (!empty($top_four[1])) { ?>
+                        <tr>
+                        <td><strong>2nd</strong>:
+                            <?php
+                            if ($tournament['per_team']==1) { ?>
+                                <br /><?php
+                                $player = $dbc->queryOne('SELECT username FROM users WHERE userid='.(int)$top_four[1]);
+                                ?>&nbsp;<font color="<?php echo $colors['blended_text']; ?>"><strong><?php echo $player; ?></strong><br /></font><?php
+                            } else {
+                                $team_data = $dbc->queryOne('SELECT name FROM tournament_teams WHERE id='.(int)$top_four[1]);
+                                if(!ALP_TOURNAMENT_MODE) $player_data = $dbc->query('SELECT tournament_players.userid as userid,users.username AS username
+                                                            FROM tournament_players LEFT JOIN users USING (userid)
+                                                            WHERE tournament_players.tourneyid='.(int)$tournament['tourneyid'].'
+                                                            AND tournament_players.teamid='.(int)$top_four[1].' ORDER BY username');
+                                echo $team_data; ?><br />
+                                <?php
+                                if(!ALP_TOURNAMENT_MODE) {
+                                    while($player = $player_data->fetchRow()) { ?>
+                                        <?php spacer(16); ?>&nbsp;<a href="disp_users.php?id=<?php echo $player['userid']; ?>" style="color: <?php echo $colors['blended_text']; ?>"><?php echo $player['username']; ?></a><br /><?php
+                                    }
+                                }
+                            } spacer(1,6,1);?></td>
+                        </tr><?php
+                    } ?>
+                    <?php
+                    if (!empty($top_four[2])) { ?>
+                        <tr>
+                        <td><strong>3rd</strong>:
+                            <?php
+                            if ($tournament['per_team']==1) { ?>
+                                <br /><?php
+                                $player = $dbc->queryOne('SELECT username FROM users WHERE userid = '.(int)$top_four[2]);
+                                ?>&nbsp;<font color="<?php echo $colors['blended_text']; ?>"><strong><?php echo $player; ?></strong><br /></font><?php
+                            } else {
+                                $team_data = $dbc->queryOne('SELECT name FROM tournament_teams WHERE id='.(int)$top_four[2]);
+                                if(!ALP_TOURNAMENT_MODE) $player_data = $dbc->query('SELECT tournament_players.userid as userid,users.username AS username
+                                                            FROM tournament_players LEFT JOIN users USING (userid)
+                                                            WHERE tournament_players.tourneyid='.(int)$tournament['tourneyid'].'
+                                                            AND tournament_players.teamid='.(int)$top_four[2].' ORDER BY username');
+                                echo $team_data; ?><br />
+                                <?php
+                                if(!ALP_TOURNAMENT_MODE) {
+                                    while($player = $player_data->fetchRow()) { ?>
+                                        <?php spacer(16); ?>&nbsp;<a href="disp_users.php?id=<?php echo $player['userid']; ?>" style="color: <?php echo $colors['blended_text']; ?>"><?php echo $player['username']; ?></a><br /><?php
+                                    }
+                                }
+                            } spacer(1,6,1);?></td>
+                        </tr><?php
+                    } ?>
+                    <?php
+                    if (!empty($top_four[3])) { ?>
+                        <tr>
+                        <td><strong>4th</strong>:
+                            <?php
+                            if($tournament['per_team']==1) { ?>
+                                <br /><?php
+                                $player = $dbc->queryOne('SELECT username FROM users WHERE userid = '.(int)$top_four[3]);
+                                ?>&nbsp;<font color="<?php echo $colors['blended_text']; ?>"><strong><?php echo $player; ?></strong><br /></font><?php
+                            } else {
+                                $team_data = $dbc->queryOne('SELECT name FROM tournament_teams WHERE id='.(int)$top_four[3]);
+                                if(!ALP_TOURNAMENT_MODE) $player_data = $dbc->query('SELECT tournament_players.userid as userid,users.username AS username
+                                                            FROM tournament_players LEFT JOIN users USING (userid)
+                                                            WHERE tournament_players.tourneyid='.(int)$tournament['tourneyid'].'
+                                                            AND tournament_players.teamid='.(int)$top_four[3].' ORDER BY username');
+                                echo $team_data; ?><br />
+                                <?php
+                                if(!ALP_TOURNAMENT_MODE) {
+                                    while($player = $player_data->fetchRow()) { ?>
+                                        <?php spacer(16); ?>&nbsp;<a href="disp_users.php?id=<?php echo $player['userid']; ?>" style="color: <?php echo $colors['blended_text']; ?>"><?php echo $player['username']; ?></a><br /><?php
+                                    }
+                                }
+                            } spacer(1,6,1);?></td>
+                        </tr><?php
+                    } ?>
+                </table>
+                <br />
+                <?php
+            }
+            if(!ALP_TOURNAMENT_MODE) {
+                $placings = array('1st','2nd','3rd','4th');
+                $prizes = $dbc->query('SELECT tourneyplace, prizeid, prizename FROM prizes
+                                    WHERE tourneyid='.(int)$tournament['tourneyid'].'
+                                    AND tourneyplace>0 ORDER BY tourneyplace');
+                $otherprizes = $dbc->query('SELECT prizeid, prizename FROM prizes
+                                            WHERE tourneyid='.(int)$tournament['tourneyid'].'
+                                            AND tourneyplace=0 ORDER BY tourneyplace');
+                if ($prizes->numRows() || $otherprizes->numRows()) { ?>
+                    <?php dotted_line(0,4); ?>
+                    <strong>prizes</strong>:<?php if (current_security_level()>=2) { echo " <font class=\"sm\">[<a href=\"admin_prizes.php\">admin</a>]</font>"; } ?><br />
+                    <?php dotted_line(); ?>
+                    <table border="0" width="100%"><tr><td>
+                    <?php
+                    if ($prizes->numRows()) {
+                        $prevplace = 0;
+                        while ($row = $prizes->fetchRow()) {
+                            if ($prevplace != $row['tourneyplace']) {
+                                if ($prevplace>0) spacer(1,8,1);
+                                echo '<strong>'.$placings[($row['tourneyplace']-1)].'</strong> place wins:<br />';
+                            }
+                            spacer(16); ?><font class="sm">&nbsp;<a href="disp_prizes.php#<?php echo $row['prizeid']; ?>" style="color: <?php echo $colors['blended_text']; ?>"><?php echo $row['prizename']; ?></a><br /></font>
+                            <?php
+                            $prevplace = $row['tourneyplace'];
+                        }
+                    }
+                    if($otherprizes->numRows()) {
+                        if($prizes->numRows()) spacer(1,8,1);
+                        echo '<strong>other</strong>:<br /><font class="sm">';
+                        while($row = $otherprizes->fetchRow()) {
+                            spacer(16); ?>&nbsp;<a href="disp_prizes.php#<?php echo $row['prizeid']; ?>" style="color: <?php echo $colors['blended_text']; ?>"><?php echo $row['prizename']; ?></a><br />
+                            <?php
+                        }
+                        echo '</font>';
+                    } ?>
+                    </td></tr></table>
+                    <?php
+                }
+            } ?>
+            <br />
+        </td>
+        <td width="50%" valign="top">
+            <?php
+            if(!ALP_TOURNAMENT_MODE || ALP_TOURNAMENT_MODE_COMPUTER_GAMES) { ?>
+                <strong>official maps</strong>: <?php if ($mapvote  and  !$tournament['lockstart']) { ?>[<a href="maps.php?id=<?php echo $tournament['tourneyid']; ?>"><strong>vote for maps</strong></a>]<?php } ?><br />
+                <div class="ul"><font class="sm">
+                <?php
+                $maps = $dbc->query("SELECT DISTINCT map FROM tournament_matches WHERE tourneyid='".$tournament['tourneyid']."' AND map IS NOT NULL ORDER BY rnd");
+                if($maps->numRows()) {
+                    while($map = $maps->fetchRow()) { ?>
+                        <a href="preview.php?gameid=<?php echo $game['gameid']; ?>&map=<?php echo urlencode($map['map']); ?>" target="MAPS"><?php
+                        echo $map['map'];
+                        ?></a><br />
+                        <?php
+                    } ?>
+                    <table border="0" cellspacing="1" cellpadding="0" width="218" bgcolor="<?php echo $colors['border']; ?>" class="centerd">
+                    <tr>
+                    <td bgcolor="<?php echo $colors['cell_background']; ?>">
+                        <iframe src="preview.php" name="MAPS" width="218" height="163" scrolling="no" frameborder="0" style="
+                            scrollbar-3dlight-color: <?php echo $colors['cell_title']; ?>;
+                            scrollbar-arrow-color: <?php echo $colors['cell_title']; ?>;
+                            scrollbar-base-color: <?php echo $colors['cell_background']; ?>;
+                            scrollbar-darkshadow-color: <?php echo $colors['cell_background']; ?>;
+                            scrollbar-face-color: <?php echo $colors['cell_background']; ?>;
+                            scrollbar-highlight-color: <?php echo $colors['text']; ?>;
+                            scrollbar-shadow-color: <?php echo $colors['blended_text']; ?>;
+                            scrollbar-track-color: <?php echo $colors['cell_title']; ?>"></iframe></td>
+                    </tr>
+                    </table>
+                    <?php
+                } else { ?>
+                    none listed.
+                    <?php
+                } ?>
+                </font></div>
+                <br />
+                <?php
+            } ?>
+            <strong>rules</strong>:<br />
+            <?php
+            if(!empty($tournament['notes'])) { ?>
+                <div class="ul"><font class="sm"><?php
+                $article = $tournament['notes'];
+                $article = str_replace("&lt;","<",$article);
+                $article = str_replace("&gt;",">",$article);
+                $article = strip_tags($article,'<a><strong><i><u><font><img />');
+                echo nl2br($article); ?></font></div>
+                <?php
+            } ?>
+            <br />
+            <?php
+            if(!ALP_TOURNAMENT_MODE || ALP_TOURNAMENT_MODE_COMPUTER_GAMES) { ?>
+                <strong>server settings</strong>:<br />
+                <?php
+                {% if tournament.settings %}
+                    <div class="ul"><font class="sm">
+                    $article = $tournament['settings'];
+                    $article = str_replace("&lt;","<",$article);
+                    $article = str_replace("&gt;",">",$article);
+                    $article = strip_tags($article,'<a><strong><i><u><font><img />');
+                    echo nl2br($article); ?></font></div>
+                    <?php
+                {% endif %}
+            } ?>
+            <br />
+            </td>
+    </tr>
+    </table>
+    <div align="right">[<a href="tournaments.php">back to all tournaments</a>]</div>
+
+{% endblock %}

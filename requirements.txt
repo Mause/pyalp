@@ -1,16 +1,42 @@
-#ipython
-pudb
-#flake8
-Django
-psycopg2
-django-configurations
-raven
-WebTest
-django-webtest
-model-mommy
-django-jenkins
-django-debug-toolbar
-django-model-utils
-django-redis-cache
-hiredis
-django-floppyforms
+# generic
+Django==1.6
+django-configurations==0.7
+django-vanilla-views==1.0.2
+django-jsonify==0.2.1
+
+# debugging
+pudb==2013.5.1
+django-debug-toolbar==1.0
+django-extensions==1.2.5
+
+# assets
+pillow==2.2.2
+django-pipeline==1.3.19
+
+# testing
+WebTest==2.0.10
+django-webtest==1.7.5
+django-jenkins==0.14.1
+
+# logging
+raven==3.6.1
+
+# redis/database stuff
+django-redis-cache==0.10.1
+django-redis-sessions==0.4.0
+hiredis==0.1.1
+# redis==2.8.1
+psycopg2==2.5.1
+
+# form stuff
+django-floppyforms==1.1
+git+https://github.com/jakewins/django-money@8aeca9ea10a27ec1784d5faaba3e4c93a0c597c1#egg=django-money
+
+# model stuff
+model-mommy==1.2
+django-model-utils==1.5.0
+py-moneyed==0.5.0
+South==0.8.4
+
+# for admindocs
+docutils==0.11

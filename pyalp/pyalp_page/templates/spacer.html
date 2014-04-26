@@ -1,0 +1,16 @@
+{% load staticfiles %}
+
+<img
+    src="{% static 'theme/img/pxt.gif' %}"
+    border="0"
+    width="{{width}}"
+    height="{{height}}"
+    alt=""
+    {% if align %}
+        align="{{align}}"
+    {% endif %}
+/>
+
+{% if br %}
+    <br />
+{% endif %}

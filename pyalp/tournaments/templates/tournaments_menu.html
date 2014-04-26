@@ -1,0 +1,72 @@
+{% skin.get_arrow %}
+&nbsp;
+<a href="tournaments.php?id={{ tourney.id }}" class="menu">
+    <strong>information</strong>
+</a>
+{% skin.get_arrow %}
+&nbsp;
+<a href="disp_teams.php?id={{ tourney.id }}" class="menu">
+    {{ txt }}
+</a>
+{% if extra_admin and current_security_level() >= 2 and not tournament.lockstart %}
+    [
+        <a href="admin_teams.php?show={{ tourney.id }}" class="menu">add</a> |&nbsp;
+        <a href="admin_teams_delete.php?show={{ tourney.id }}" class="menu">del</a>
+    ]
+{% endif %}
+{% skin.get_arrow %}
+&nbsp;
+{% if tournament.lockstart %}
+    <a href="{{ link }}" class="menu">
+{% else %}
+    <font style="color: {{ skin.colors.blended_text }}">
+{% endif %}
+
+standings
+{% if tournament.lockstart %}
+    </a>
+{% else %}
+    </font>
+{% endif %}
+
+mapvote = dbc->database_num_rows(dbc->database_query('SELECT * FROM poll_maps WHERE tourneyid='.(int)tourneyid.' AND selected=1'))
+{% if mapvote %}
+    {% skin.get_arrow %}
+    &nbsp;
+    <a href="maps.php?id={{ tourney.id }}" class="menu">
+        maps
+    </a>
+{% endif %}
+
+<!--
+Disable admin_disp_tournaments for now
+{% comment %}
+    {% if tournament_is_secure(tourneyid) and not ALP_TOURNAMENT_MODE %}
+        {% skin.get_arrow %}&nbsp;
+        {% if tournament.lockstart %}
+            <a href="admin_disp_tournament.php?id={{ tourney.id }}" class="menu">
+        {% else %}
+            <font style="color: {{ skin.colors.blended_text }}">
+        {% endif %}
+        admin
+        {% if tournament.lockstart %}
+            </a>
+        {% else %}
+            </font>
+        {% endif %}
+    {% endif %}
+{% endcomment %}
+-->
+
+{% if extra_admin and current_security_level() >= 2 and not tournament.lockstart %}
+    {% skin.get_arrow %}
+    &nbsp;
+    <a href="admin_seeding.php?show={{ tourney.id }}" class="menu">
+        seeding
+    </a>
+{% endif %}
+
+<br />
+{% if double_br %}
+    <br />
+{% endif %}

@@ -1,0 +1,24 @@
+<tr>
+    {% if self.get_type != 'left' and self.get_loc != 'main' %}
+        <td width="{% skin.container.horizontalpadding }}">
+            {% spacer skin.container.horizontalpadding %}
+        </td>
+    {% endif %}
+
+    <td
+        width="100%"
+        {% if self.get_type !='main' %} colspan=2 {% endif %}
+        >
+
+            {% start_module loc self._str  ""  self._link %}
+            {% include_module 'include/modules/mod_' . self._name . '.php'
+            end_module(loc)
+    </td>
+
+    {% if self.get_type != 'right' and self.get_loc != 'main' %}
+        <td
+            width="{{ skin.container.horizontalpadding }}">
+                {% spacer skin.container.horizontalpadding %}
+        </td>
+    {% endif %}
+</tr>

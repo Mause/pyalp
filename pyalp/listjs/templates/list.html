@@ -1,0 +1,37 @@
+{% load staticfiles %}
+{% load jsonify %}
+
+<div id="listjs-{{name}}-container">
+    <input class="search" placeholder="Search" />
+
+    <table>
+        <thead>
+            <tr>
+                {% for column in options.valueNames %}
+                    <th class="sort" data-sort="{{column}}">
+                        {{column}}
+                    </th>
+                {% endfor %}
+            </tr>
+        </thead>
+
+        <tbody class="list">
+            {{ prerender }}
+        </tbody>
+
+        {% if footer %}
+            <tfoot>
+                {{ footer }}
+            </tfoot>
+        {% endif %}
+    </table>
+</div>
+
+<script src="{% static 'js/list.js' %}"></script>
+
+<script>
+    new List(
+            "listjs-{{name}}-container",
+            {{options|jsonify}}
+    );
+</script>

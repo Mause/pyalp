@@ -1,0 +1,55 @@
+{% load staticfiles %}
+{% load spacer %}
+{% load debugger %}
+
+<table
+	border="0"
+	cellpadding="0"
+	cellspacing="1"
+	width="980"
+	align="center"
+	bgcolor="{{ skin.colors.border }}"
+	class="centerd">
+
+	<tr>
+		<td bgcolor="{{ skin.colors.background }}">
+			&nbsp;&nbsp;&nbsp;&nbsp;
+
+			<a href="index.php">
+				<img
+					src="{% static skin.images.title %}"
+					border="0"
+					{% debugger %}
+					alt="{{ skin.lan.name }}" />
+			</a>
+			<br />
+
+			{% spacer 1 4 1 %}
+			<table border="0" cellpadding="2" cellspacing="2" width="100%" bgcolor="{{ skin.colors.cell_title }}">
+			<tr>
+				<td>
+					{% include '_top_menu.php' %}
+				</td>
+			</tr>
+			</table>
+			{% spacer 1 4 1 %}
+			<table border="0" cellpadding="0" cellspacing="2" width="100%" bgcolor="{{ skin.colors.cell_title }}" class="smm">
+			<tr>
+				<td>
+					{% spacer 20 1 %}
+					{{ skin.mini_menu }} <!-- //include/_functions.php -->
+					<br />
+				</td>
+				<td align="right">
+					<!-- {!% cp_menu %} --> <!-- //include/_functions.php ?> -->
+					{% spacer skin.container.horizontalpadding 1 1 %}
+				</td>
+			</tr>
+			</table>
+			<br />
+			<table border="0" cellpadding="0" cellspacing="0" width="100%">
+				<tr>
+					<td width="{{ modules.get_width.left }}" valign="top">
+						{{ modules.display_modules_left }}
+					</td>
+					<td width="100%" valign="top">
