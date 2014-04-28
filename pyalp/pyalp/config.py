@@ -29,8 +29,19 @@ class Config(object):
         self.load_skin_config()
 
     def load_skin_config(self):
+        if exists(self.py_skin_config_path):
+            try:
+                config = self._load_python_skin_config()
+            except Exception as e:
+                logging.debug('Could not load python config for {}'.format(
+                    self.skin['skin_name']
+                ))
+                logging.exception(e)
+            else:
+                self.skin.update(config['skin'])
 
-        if exists(self.php_skin_config_path):
+        elif exists(self.php_skin_config_path):
+
             try:
                 config = self._load_php_skin_config()
             except Exception:
@@ -39,13 +50,6 @@ class Config(object):
                 del config['ALP_TOURNAMENT_MODE']
                 self.skin.update(config)
 
-        elif exists(self.py_skin_config_path):
-            import pudb
-            pudb.set_trace()
-            module = importlib.__import__()
-            config = vars(module)
-
-            self.skin.update(config['skin'])
         else:
             raise Exception('Derp')
 
