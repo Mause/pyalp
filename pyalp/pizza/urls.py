@@ -6,9 +6,7 @@ from pyalp.utils import redirect
 urlpatterns = patterns(
     '',
 
-    url(r'^$', views.index),
-
-    url(r'^pizza$', views.pizza),
+    url(r'^$', views.pizza),
     url(r'^pizza_list$', views.pizza_list),
     url(r'^admin/pizza_list$', views.admin_pizza_list),
 
@@ -25,6 +23,6 @@ legacy_patterns = patterns(
     url(r'^chng_pizza\.php$', redirect('/admin/pizza/pizza')),
 
     url(r'^admin_pizza_list\.php$', redirect('/pizza/admin/pizza_list')),
-    url(r'^pizza\.php$', redirect('/pizza/pizza')),
+    url(r'^pizza\.php$', redirect('/pizza/')),
     url(r'^pizza_list\.php$', redirect('/pizza/pizza_list'))
 )
