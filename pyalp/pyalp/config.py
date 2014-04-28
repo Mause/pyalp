@@ -62,6 +62,19 @@ class Config(object):
     def py_skin_config_path(self):
         return join(self.skin['skin_path'], '_config.py')
 
+    def _load_python_skin_config(self):
+        module = importlib.machinery.SourceFileLoader(
+            '{}.config'.format(self.skin['skin_name']),
+            self.py_skin_config_path
+        )
+        module = module.load_module()
+        assert hasattr(module, 'config')
+        assert callable(module.config)
+
+        return module.config({
+            'ALP_TOURNAMENT_MODE': False
+        })
+
     def _load_php_skin_config(self):
         warnings.warn(
             'Loading a PHP based skin configuration '
