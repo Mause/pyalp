@@ -83,7 +83,11 @@ class AdminToggleView(CreateView):
 
         args = csrf(request)
         args['toggle_form'] = FlagsForm(status_dict).as_p()
-        return render_to_response('admin_toggle.html', args)
+        return render_to_response(
+            'admin_toggle.html',
+            args,
+            context_instance=request
+        )
 
     def post(self, request):
         toggle_form = FlagsForm(request.POST)
