@@ -20,8 +20,7 @@ class ListJSWidget(widgets.Widget):
         return super().__init__(*args, **kwargs)
 
     def render_totals(self, values, valueNames):
-        # totals = {k: 0 for k in values[0].keys()}
-        totals = {k: 0 for k in valueNames}
+        totals = dict.fromkeys(valueNames, 0)
 
         for val in values:
             for k, v in val.items():
