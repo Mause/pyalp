@@ -85,4 +85,9 @@ class Config(object):
         )
         return context
 
-config = Config()
+
+def get_config():
+    if not hasattr(get_config, 'config'):
+        get_config.config = Config()
+
+    return get_config.config

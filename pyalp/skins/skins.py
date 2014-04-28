@@ -3,7 +3,7 @@ from os.path import join, exists, basename
 from PIL import Image
 from django.template.loader import render_to_string
 
-from pyalp.config import config
+from pyalp.config import get_config
 
 from pyalp.map import tree
 
@@ -12,24 +12,20 @@ class Skin(object):
     tree = list(tree)
 
     def __init__(self):
-        self.skin_name = config.skin['skin_name']
+        self.config = get_config()
 
-        self.asset_path = config.skin['skin_path']
+        self.skin_name = self.config.skin['skin_name']
+
+        self.asset_path = self.config.skin['skin_path']
         assert exists(self.asset_path)
 
     @property
-    def lan(self):
-        return {
-            'name': 'RFLAN'
-        }
-
-    @property
     def colors(self):
-        return config.skin['colors']
+        return self.config.skin['colors']
 
     @property
     def container(self):
-        return config.skin['container']
+        return self.config.skin['container']
 
     @property
     def images(self):
