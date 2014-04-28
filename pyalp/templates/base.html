@@ -2,7 +2,19 @@
 {% load display_top %}
 {% load display_bottom %}
 
+{% load debugger %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{lan.name}}</title>
+</head>
+<body>
+
 {% display_top %}
     {% block content %}
     {% endblock %}
 {% display_bottom %}
+
+</body>
+</html>
