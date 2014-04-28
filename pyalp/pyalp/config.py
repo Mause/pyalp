@@ -1,6 +1,7 @@
 from os.path import join, exists
 import importlib
 import logging
+import warnings
 
 from django.conf import settings
 
@@ -62,6 +63,11 @@ class Config(object):
         return join(self.skin['skin_path'], '_config.py')
 
     def _load_php_skin_config(self):
+        warnings.warn(
+            'Loading a PHP based skin configuration '
+            'file is depreciated and buggy'
+        )
+
         context = {
             'colors': {},
             'images': {},
