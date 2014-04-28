@@ -45,7 +45,10 @@ class FlagRegistry(object):
         }
 
 
-
 # the FlagRegistry is essentially a singleton :)
-flag_registry = FlagRegistry()
-del FlagRegistry
+
+def get_flag_registry():
+    if not hasattr(get_flag_registry, 'flag_registry'):
+        get_flag_registry.flag_registry = FlagRegistry()
+
+    return get_flag_registry.flag_registry

@@ -8,7 +8,7 @@ from vanilla import CreateView
 import floppyforms.forms
 
 from flags.models import Flag
-from flags.registry import flag_registry
+from flags.registry import get_flag_registry
 
 
 class FlagsForm(floppyforms.forms.Form):
@@ -79,7 +79,7 @@ class FlagsForm(floppyforms.forms.Form):
 
 class AdminToggleView(CreateView):
     def get(self, request):
-        status_dict = flag_registry.get_statusdict()
+        status_dict = get_flag_registry().get_statusdict()
 
         args = csrf(request)
         args['toggle_form'] = FlagsForm(status_dict).as_p()

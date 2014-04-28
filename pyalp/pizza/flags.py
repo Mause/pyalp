@@ -1,5 +1,5 @@
-from flags.registry import flag_registry
+from flags.registry import get_flag_registry
 
 
 def register_flags():
-    flag_registry.add_flag('pizza_orders_locked', False)
+    get_flag_registry().add_flag('pizza_orders_locked', False)
