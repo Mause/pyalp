@@ -31,6 +31,10 @@ class Config(object):
 
     def load_skin_config(self):
         if exists(self.py_skin_config_path):
+            logging.debug('Loading python config file for theme "{}"'.format(
+                self.skin['skin_name']
+            ))
+
             try:
                 config = self._load_python_skin_config()
             except Exception as e:
@@ -42,6 +46,9 @@ class Config(object):
                 self.skin.update(config['skin'])
 
         elif exists(self.php_skin_config_path):
+            logging.debug('Loading php config file for theme "{}"'.format(
+                self.skin['skin_name']
+            ))
 
             try:
                 config = self._load_php_skin_config()
