@@ -2,7 +2,7 @@ from os.path import exists
 
 from django.template.loader import render_to_string
 
-from pyalp.skin import skin
+from pyalp.skin import get_skin
 
 from pyalp_page.templatetags.spacer import SpacerNode
 
@@ -22,6 +22,8 @@ class Module(object):
         self.isSlim = sl
         self.isOpen = 1
         self.module_type = module_type
+
+        self.skin = get_skin()
 
     def display_module(self, overwrite=''):
         # global container
@@ -45,11 +47,13 @@ class Module(object):
             dims = {}
             for side in sides:
                 key = 'mod' + side
-                if exists(skin.skin_name + 'mod'+side+'.gif'):
-                    temp = skin.getimagesize(skin.skin_name + key + '.gif')
+                if exists(self.skin.skin_name + 'mod'+side+'.gif'):
+                    temp = self.skin.getimagesize(
+                        self.skin.skin_name + key + '.gif'
+                    )
                     dims[key] = temp[0]
                 else:
-                    dims[key] = skin.container['border_width']
+                    dims[key] = self.skin.container['border_width']
 
             extra = []
             if(dims['modtl'] > dims['modbl'] or dims['modtl'] > dims['modbl']):
@@ -63,8 +67,8 @@ class Module(object):
                 extra[1] = dims['modtr']
 
             return (
-                skin.container[self.loc + 'module'] - 2 *
-                skin.container['horizontalmodulepadding'] - extra[0] -
+                self.skin.container[self.loc + 'module'] - 2 *
+                self.skin.container['horizontalmodulepadding'] - extra[0] -
                 extra[1] - 10) + 'px'
         else:
             return '96%'
@@ -82,6 +86,8 @@ class ModuleManager(object):
         self.leftModules = []
         self.rightModules = []
         self.mainModules = []
+
+        self.skin = get_skin()
 
     def add_module(self, n='', l='', sec=0, st='', sl=0, link='', type=''):
         # adds a module to the manager
@@ -103,7 +109,7 @@ class ModuleManager(object):
         return self.display_modules_for_side(
             self.rightModules,
             'right',
-            skin.container['rightmodule']
+            self.skin.container['rightmodule']
         )
 
     def display_modules_main(self):
@@ -116,7 +122,7 @@ class ModuleManager(object):
         return self.display_modules_for_side(
             self.leftModules,
             'left',
-            skin.container['leftmodule']
+            self.skin.container['leftmodule']
         )
 
     def display_modules_for_side(self, modules, side, width_modules=0):
@@ -141,7 +147,9 @@ class ModuleManager(object):
         elif side != 'main':
             import pudb
             pudb.set_trace()
-            node = SpacerNode.init_lit(skin.container['horizontalpadding'])
+            node = SpacerNode.init_lit(
+                self.skin.container['horizontalpadding']
+            )
             return node.render({})
         else:
             return ''
@@ -149,19 +157,19 @@ class ModuleManager(object):
     def get_width(self, side=None):
         if self.rightModules:
             right = (
-                skin.container['rightmodule'] + 2 *
-                skin.container['horizontalpadding']
+                self.skin.container['rightmodule'] + 2 *
+                self.skin.container['horizontalpadding']
             )
         else:
-            right = skin.container['horizontalpadding']
+            right = self.skin.container['horizontalpadding']
 
         if self.leftModules:
             left = (
-                skin.container['leftmodule'] + 2 *
-                skin.container['horizontalpadding']
+                self.skin.container['leftmodule'] + 2 *
+                self.skin.container['horizontalpadding']
             )
         else:
-            left = skin.container['horizontalpadding']
+            left = self.skin.container['horizontalpadding']
 
         output = {
             'right': right,

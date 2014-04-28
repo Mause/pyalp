@@ -3,7 +3,7 @@ from collections import namedtuple
 from django import template
 from django.utils.text import unescape_string_literal
 
-from pyalp.skin import skin
+from pyalp.skin import get_skin
 from pyalp_translation.templatetags.trans import TransNode
 
 register = template.Library()
@@ -14,6 +14,7 @@ Link = namedtuple('Link', 'name,url')
 class RelatedLinksGroupNode(template.Node):
     def __init__(self, related_links):
         self.related_links = related_links
+        self.skin = get_skin()
 
     def render(self, context):
         html = ""
@@ -22,7 +23,7 @@ class RelatedLinksGroupNode(template.Node):
             html += '<font class="sm"><strong>related links</strong> //<br />'
 
             for link in self.related_links:
-                html += "&nbsp;" + skin.get_arrow()
+                html += "&nbsp;" + self.skin.get_arrow()
                 html += '&nbsp;<a href="{}">'.format(link.url)
 
                 # $val[2]>2?'<strong>super </strong>':'')

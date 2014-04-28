@@ -9,7 +9,7 @@ from django.core.files import File
 from django.template.context import Context
 from django.template.loader import get_template_from_string
 
-from pyalp.skin import skin
+from pyalp.skin import get_skin
 # import pudb
 
 
@@ -31,7 +31,9 @@ class SmartFileStorage(FileSystemStorage):
 
             template = get_template_from_string(data, origin=path)
 
-        context = Context({'skin': skin})
+        context = Context({
+            'skin': get_skin()
+        })
         data = template.render(context)
 
         data = str.encode(data, 'utf-8')
@@ -43,7 +45,8 @@ class SkinStaticFileFinder(BaseFinder):
     storage_class = SmartFileStorage
 
     def __init__(self, app_names=None, *args, **kwargs):
-        self.storage = self.storage_class(skin.asset_path)
+        self.skin = get_skin()
+        self.storage = self.storage_class(self.skin.asset_path)
 
         # this prefix makes django.contrib.staticfiles put the skin files in a
         # skin/ subdirectory
@@ -52,7 +55,7 @@ class SkinStaticFileFinder(BaseFinder):
         super(SkinStaticFileFinder, self).__init__(*args, **kwargs)
 
     def find(self, path, all=False):
-        skin_dir = join(settings.SKIN_DIR, skin.skin_name)
+        skin_dir = join(settings.SKIN_DIR, self.skin.skin_name)
         file_path = join(skin_dir, path)
 
         if all:

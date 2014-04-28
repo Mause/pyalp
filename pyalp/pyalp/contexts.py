@@ -13,8 +13,8 @@ def url_name(request):
 
 
 def skin(request):
-    from pyalp.skin import skin
-    return {'skin': skin}
+    from pyalp.skin import get_skin
+    return {'skin': get_skin()}
 
 
 def modules(request):
