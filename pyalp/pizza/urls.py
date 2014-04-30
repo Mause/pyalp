@@ -7,7 +7,7 @@ urlpatterns = patterns(
     '',
 
     url(r'^$', views.pizza),
-    url(r'^pizza_list$', views.pizza_list),
+    url(r'^list$', views.pizza_list),
     url(r'^admin/pizza_list$', views.admin_pizza_list),
 
     # these are going to be implemented in the Django admin interface
@@ -24,5 +24,5 @@ legacy_patterns = patterns(
 
     url(r'^admin_pizza_list\.php$', redirect('/pizza/admin/pizza_list')),
     url(r'^pizza\.php$', redirect('/pizza/')),
-    url(r'^pizza_list\.php$', redirect('/pizza/pizza_list'))
+    url(r'^pizza_list\.php$', redirect('/pizza/list'))
 )
