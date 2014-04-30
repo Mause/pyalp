@@ -12,6 +12,9 @@ class DebuggerNode(template.Node):
 
 @register.tag
 def debugger(parser, token):
+    """
+    Activates a debugger session in both passes of the template renderer
+    """
     pudb.set_trace()
 
     return DebuggerNode()

@@ -58,6 +58,16 @@ def get_const_name(token):
 
 @register.tag
 def trans(parser, token):
+    """
+    Used to interact with pyalp's custom translation implementation
+
+    Usage:
+
+    .. code-block::
+
+        {% trans "key" %}
+
+    """
     const_name = get_const_name(token)
 
     return TransNode(const_name)
