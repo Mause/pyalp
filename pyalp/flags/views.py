@@ -200,14 +200,24 @@ class AdminToggleView(CreateView):
                 flag.enabled = toggle_form.cleaned_data[flag.name]
                 flag.save()
 
-        # create new flag objects where necessary
-        # one time op for most of the time
+        self.reinitialize_flag_table(
+            flags,
+            existing=toggle_form.cleaned_data
+        )
+
+        return self.get(request)
+
+    def reinitialize_flag_table(self, flags, existing):
+        """
+        create new flag objects where necessary
+        one time op for most of the time
+        """
+
         initalized_flag_names = set(map(attrgetter('name'), flags))
-        for name, val in toggle_form.cleaned_data.items():
+        for name, val in existing.items():
             if name not in initalized_flag_names:
                 Flag(name=name, enabled=val).save()
 
-        return self.get(request)
 
     # @method_decorator(login_required)
     # @permission_required('flags.can_change_flags')
