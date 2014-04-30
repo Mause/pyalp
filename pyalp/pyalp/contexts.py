@@ -26,3 +26,10 @@ def lan(request):
     lan = {'name': 'RFLAN'}
 
     return {'lan': lan}
+
+
+from flags.registry import get_flag_registry
+
+
+def flags(request):
+    return {'flags': get_flag_registry().get_statusdict()}

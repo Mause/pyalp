@@ -73,6 +73,7 @@ class Common(Configuration):
         "pyalp.contexts.url_name",
         "pyalp.contexts.skin",
         "pyalp.contexts.modules",
+        "pyalp.contexts.flags",
         "pyalp.contexts.lan"
     ]
     ALLOWED_HOSTS = []
