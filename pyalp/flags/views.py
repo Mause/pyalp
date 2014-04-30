@@ -5,27 +5,29 @@ from django.core.context_processors import csrf
 from pyalp.utils import render_to_response
 
 from vanilla import CreateView
-import floppyforms.forms
+
+from django import forms
+from django.forms import BooleanField
 
 from flags.models import Flag
 from flags.registry import get_flag_registry
 
 
-class FlagsForm(floppyforms.forms.Form):
+class FlagsForm(forms.Form):
     if settings.ALP_TOURNAMENT_MODE:
-        satellite = floppyforms.BooleanField(
+        satellite = BooleanField(
             False,
             label='ALP satellites',
             help_text=''
         )
 
-        benchmarks = floppyforms.BooleanField(
+        benchmarks = BooleanField(
             False,
             label='benchmark competition',
             help_text=''
         )
 
-        caffeine = floppyforms.BooleanField(
+        caffeine = BooleanField(
             False,
             label='caffeine log',
             help_text=''
@@ -33,143 +35,143 @@ class FlagsForm(floppyforms.forms.Form):
 
     if ((not settings.ALP_TOURNAMENT_MODE) or
             settings.ALP_TOURNAMENT_MODE_COMPUTER_GAMES):
-        hlsw = floppyforms.BooleanField(
+        hlsw = BooleanField(
             False,
             label='HLSW server connects',
             help_text=''
         )
 
     if not settings.ALP_TOURNAMENT_MODE:
-        uploading = floppyforms.BooleanField(
+        uploading = BooleanField(
             False,
             label='file uploading',
             help_text=''
         )
 
-        files = floppyforms.BooleanField(
+        files = BooleanField(
             False,
             label='files',
             help_text=''
         )
 
-        foodrun = floppyforms.BooleanField(
+        foodrun = BooleanField(
             False,
             label='food runs',
             help_text=''
         )
 
-        pizza = floppyforms.BooleanField(
+        pizza = BooleanField(
             False,
             label='pizza orders',
             help_text=''
         )
 
-        gamerequests = floppyforms.BooleanField(
+        gamerequests = BooleanField(
             False,
             label='game requests',
             help_text=''
         )
 
-        servers = floppyforms.BooleanField(
+        servers = BooleanField(
             False,
             label='game servers',
             help_text=''
         )
 
-        marath = floppyforms.BooleanField(
+        marath = BooleanField(
             False,
             label='the marathon',
             help_text=''
         )
 
-        music = floppyforms.BooleanField(
+        music = BooleanField(
             False,
             label='music jukebox',
             help_text=''
         )
 
     if not settings.ALP_TOURNAMENT_MODE:
-        prizes = floppyforms.BooleanField(
+        prizes = BooleanField(
             False,
             label='prize registration',
             help_text=''
         )
 
-    schedule = floppyforms.BooleanField(
+    schedule = BooleanField(
         False,
         label='schedule',
         help_text=''
     )
 
     if not settings.ALP_TOURNAMENT_MODE:
-        seating = floppyforms.BooleanField(
+        seating = BooleanField(
             False,
             label='seating map',
             help_text=''
         )
 
-        shoutbox = floppyforms.BooleanField(
+        shoutbox = BooleanField(
             False,
             label='shoutbox',
             help_text=''
         )
 
-    messaging = floppyforms.BooleanField(
+    messaging = BooleanField(
         False,
         label='user messaging',
         help_text=''
     )
 
-    currentattendance = floppyforms.BooleanField(
+    currentattendance = BooleanField(
         False,
         label='sidebar module -- current attendance',
         help_text=''
     )
 
     if not settings.ALP_TOURNAMENT_MODE:
-        filesharing = floppyforms.BooleanField(
+        filesharing = BooleanField(
             False,
             label='extra - file sharing info',
             help_text=''
         )
 
-        gamerofthehour = floppyforms.BooleanField(
+        gamerofthehour = BooleanField(
             False,
             label='extra - gamer of the hour',
             help_text=''
         )
 
-        gamingrigs = floppyforms.BooleanField(
+        gamingrigs = BooleanField(
             False,
             label='extra - gaming rigs',
             help_text=''
         )
 
-        policy = floppyforms.BooleanField(
+        policy = BooleanField(
             False,
             label='extra - policy',
             help_text=''
         )
 
-        techsupport = floppyforms.BooleanField(
+        techsupport = BooleanField(
             False,
             label='extra - tech-support queue',
             help_text=''
         )
 
-        timeremaining = floppyforms.BooleanField(
+        timeremaining = BooleanField(
             False,
             label='extra - time remaining',
             help_text=''
         )
 
-        staff = floppyforms.BooleanField(
+        staff = BooleanField(
             False,
             label='extra - staff page',
             help_text=''
         )
 
-        sponsors = floppyforms.BooleanField(
+        sponsors = BooleanField(
             False,
             label='extra - sponsors',
             help_text=''
