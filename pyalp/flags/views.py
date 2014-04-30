@@ -1,7 +1,6 @@
 from operator import attrgetter
 
 from django.conf import settings
-from django.core.context_processors import csrf
 from pyalp.utils import render_to_response
 
 from vanilla import CreateView
@@ -182,8 +181,7 @@ class AdminToggleView(CreateView):
     def get(self, request):
         status_dict = get_flag_registry().get_statusdict()
 
-        args = csrf(request)
-        args['toggle_form'] = FlagsForm(status_dict).as_p()
+        args = {'toggle_form': FlagsForm(status_dict)}
         return render_to_response(
             'admin_toggle.html',
             args,
