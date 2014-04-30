@@ -2,15 +2,15 @@
   pk: 1
   fields:
     pizza: Peperoni
-    description: Lennon
+    description: 'salami things, lots of tomato'
     price: 10.00
     enabled: true
 
 - model: pizza.Pizza
   pk: 2
   fields:
-    pizza: Paul
-    description: McCartney
+    pizza: Meatlovers
+    description: "lots of meat"
     price: 10.00
     enabled: true
 
