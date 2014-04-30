@@ -4,7 +4,7 @@ import pudb
 register = template.Library()
 
 
-class NullNode(template.Node):
+class DebuggerNode(template.Node):
     def render(self, context):
         pudb.set_trace()
         return ""
@@ -14,4 +14,4 @@ class NullNode(template.Node):
 def debugger(parser, token):
     pudb.set_trace()
 
-    return NullNode()
+    return DebuggerNode()
