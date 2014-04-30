@@ -32,6 +32,7 @@ class Pizza(models.Model):
 
     # `price` decimal(20, 2) NOT NULL default '0',
     price = djmoney.models.fields.MoneyField(
+        "The price and currency for the pizza",
         decimal_places=2, max_digits=20, default_currency='AUD'
     )
 
@@ -48,22 +49,34 @@ class PizzaOrder(models.Model):
     """
     Resolves the many-to-many relationship between users and pizza's
     """
-    # The user that made this order
     # `userid` bigint(20) NOT NULL default '0',
-    orderer = models.ForeignKey(User)
+    orderer = models.ForeignKey(
+        User,
+        help_text="The user that made this order"
+    )
 
-    # The pizza that was ordered
     # `pizzaid` varchar(150) NOT NULL default '0',
-    pizza = models.ForeignKey(Pizza)
+    pizza = models.ForeignKey(
+        Pizza,
+        help_text="The pizza that was ordered"
+    )
 
     # `quantity` bigint(20) NOT NULL default '0',
-    quantity = models.BigIntegerField()
+    quantity = models.BigIntegerField(
+        help_text="Number of the type of pizza that was ordered"
+    )
 
     # `paid` tinyint(1) NOT NULL default '0',
-    paid = models.BooleanField(default=False)
+    paid = models.BooleanField(
+        default=False,
+        help_text="Whether the order has been paid for"
+    )
 
-    delivered = models.BooleanField(default=False)
     # `delivered` tinyint(1) NOT NULL default '0',
+    delivered = models.BooleanField(
+        default=False,
+        help_text="Whether the order has been delivered"
+    )
 
     def __str__(self):
         return '{}, {} PizzaOrder of {} {} by {}'.format(
