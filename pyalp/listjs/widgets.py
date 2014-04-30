@@ -4,8 +4,6 @@ from django.template.context import Context
 from django.template.loader import render_to_string, get_template_from_string
 from django.utils.safestring import mark_safe
 
-# import pudb
-
 
 class ListJSWidget(widgets.Widget):
     class Media:

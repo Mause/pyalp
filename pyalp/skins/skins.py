@@ -64,8 +64,6 @@ class Skin(object):
         return go
 
     def mini_menu(self):
-        import pudb
-        pu.db
         # global tree
         menu = []
         filename = basename(__file__)
