@@ -1,3 +1,4 @@
+import logging
 from os.path import abspath, dirname, join
 from configurations import Configuration
 
@@ -12,7 +13,7 @@ class InvalidVarException(object):
         except:
             missing_str = 'failed to create string representation'
 
-        raise Exception('Unknown template variable %r %s' % (
+        logging.fatal('Unknown template variable %r %s' % (
             missing, missing_str
         ))
 
