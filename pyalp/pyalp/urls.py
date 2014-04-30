@@ -6,14 +6,24 @@ from django.contrib.admindocs import urls as admindocs_urls
 
 admin.autodiscover()
 
+include_app = lambda name: url(
+    r'^{}/'.format(name),
+    include(
+        '{}.urls'.format(name),
+        app_name=name
+    )
+)
+
 urlpatterns = patterns(
     '',
     url(r'^$', include('common.urls', app_name='global')),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^admindocs/', include(admindocs_urls)),
-    url(r'^pizza/', include('pizza.urls', app_name='pizza')),
-    url(r'^tournaments/', include('tournaments.urls', app_name='tournaments')),
-    url(r'^flags/', include('flags.urls', app_name='flags'))
+
+    include_app('pizza'),
+    include_app('tournaments'),
+    include_app('flags'),
+    include_app('schedule')
 )
 
 # load in the legacy url rewrites
