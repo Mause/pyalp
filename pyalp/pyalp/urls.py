@@ -26,16 +26,25 @@ urlpatterns = patterns(
     include_app('schedule')
 )
 
+
 # load in the legacy url rewrites
-import importlib
-for app in settings.INSTALLED_APPS:
+def load_legacy_urls(app):
     try:
         urls = importlib.import_module(app + '.urls')
     except ImportError:
-        pass
+        return []
     else:
         if hasattr(urls, 'legacy_patterns'):
-            urlpatterns += getattr(urls, 'legacy_patterns')
+            return getattr(urls, 'legacy_patterns')
+        else:
+            return []
+
+
+import importlib
+for app in settings.INSTALLED_APPS:
+    urlpatterns += load_legacy_urls(app)
+
+
 
 if settings.DEBUG:
     import debug_toolbar
