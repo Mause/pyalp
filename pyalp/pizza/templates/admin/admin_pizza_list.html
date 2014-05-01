@@ -1,84 +1,64 @@
-{% extends "base.html" %}
+{% extends "admin/base_site.html" %}
+{% load trans relatedlinks staticfiles %}
+{% load admin_urls admin_static admin_modify %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+    <a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
+    &rsaquo; <a href="{% url 'admin:app_list' app_label=opts.app_label %}">Pizza</a>
+    &rsaquo; <a href="{% url opts|admin_urlname:'changelist' %}">
+        {{ opts.verbose_name_plural|capfirst }}
+    </a>
+
+    &rsaquo; {% trans "Order summary" %}
+</div>
+{% endblock %}
+
+
 {% block content %}
 
-{% load trans %}
-{% load relatedlinks %}
-{% load staticfiles %}
-{% load display_top %}
-{% load start_module %}
-
-<!-- require_once 'include/_universal.php'; -->
-<!-- x = new universal(get_lang('plural'),get_lang('singular'),2); -->
-
-<b>{% trans "administrator" %}</b>: {% trans "singular" %}<br>
-<br>
-
-{% relatedlinksgroup %}
-    {% relatedlink 'link_pizza' "../pizza" %} <!-- permissions: 1 -->
-    {% relatedlink 'link_pizza_list' "../pizza_list" %} <!-- permissions: 1 -->
-{% endrelatedlinksgroup %}
-
-<br>
-<b>{% trans "singular" %}</b>:<br>
-<br>
-
-<table border="0" cellpadding="3" cellspacing="0" width="100%" class="smm">
-{{ pizzaorderssummary }}
-</table>
-
-<br>
-<b>{% trans 'singular' %} {% trans 'detail' %}</b>:<br>
-<br>
-<table border="0" cellpadding="3" cellspacing="0" width="100%" class="smm">
-    <!--
-    TODO: add sorting options, by username and pizza
-    -->
+<table width="100%">
     <thead>
         <tr>
-            <td bgcolor="{{ skin.colors.cell_title }}"><a href="<?php echo get_script_name(); ?>?o=n">{% trans "tr_username" %}</a></td>
-            <td bgcolor="{{ skin.colors.cell_title }}"><a href="<?php echo get_script_name(); ?>?o=p">{% trans "tr_pizza" %}</a></td>
-            <td bgcolor="{{ skin.colors.cell_title }}">{% trans "tr_quantity" %}</td>
-            <td bgcolor="{{ skin.colors.cell_title }}">{% trans "tr_paid" %}</td>
-            <td bgcolor="{{ skin.colors.cell_title }}">{% trans "tr_delivered" %}</td>
+            <td class="sort" data-sort="username">{% trans "tr_username" %}</td>
+            <td class="sort" data-sort="pizza">{% trans "tr_pizza" %}</td>
+            <td>{% trans "tr_quantity" %}</td>
+            <td>{% trans "tr_paid" %}</td>
+            <td>{% trans "tr_delivered" %}</td>
         </tr>
     </thead>
 
-    <tbody>
+    <tbody class="list">
         {% for row in orders %}
             <tr>
-                <td>
-                    <!-- echo (counter%2==1?" bgcolor=\"".colors['cell_alternate']."\"":""); ?>>-->
-                    {{ row.orderer.username }}
-                </td>
-                <td>
-                    <!-- echo (counter%2==1?" bgcolor=\"".colors['cell_alternate']."\"":""); ?>>-->
-                    {{ row.pizza }}
-                </td>
-                <td>
-                    <!-- echo (counter%2==1?" bgcolor=\"".colors['cell_alternate']."\"":""); ?>>-->
-                    {{ row.quantity }}
-                </td>
+                <td class="username">{{ row.orderer.username }}</td>
+                <td class="pizza">{{ row.pizza }}</td>
+                <td class="quantity">{{ row.quantity }}</td>
 
-                <td><!-- echo (counter%2==1?" bgcolor=\"".colors['cell_alternate']."\"":""); -->
+                <td class="paid">
                     {% if row.paid %}
                         {% trans 'yes' %}
                     {% else %}
-                        <form id="payment" name="payment" action="/admin_pizza.php" method="POST">
-                            <input id="p-id" type="hidden" name="id" value="{{ row.id }}">
+                        <form method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="action" value="pay">
+                            <input type="hidden" name="orderid" value="{{ row.id }}">
                             <input id="p-submit" type="submit" value="pay this" class="formcolors">
                         </form>
                     {% endif %}
                 </td>
 
-                <td><!-- echo (counter%2==1?" bgcolor=\"".colors['cell_alternate']."\"":"");-->
+                <td class="delivered">
                     {% if row.delivered %}
                         {% trans 'yes' %}
 
                     {% elif row.paid %}
-                        <form id="delivery" name="delivery" action="/admin_pizza.php" method="POST">
-                            <input id="d-id" type="hidden" name="id" value="{{ row.id }}">
-                            <input id="d-submit" type="submit" value="deliver this" class="formcolors">
-                      </form>
+                        <form method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="action" value="deliver">
+                            <input type="hidden" name="orderid" value="{{ row.id }}">
+                            <input type="submit" value="deliver this" class="formcolors">
+                        </form>
 
                     {% else %}
                         {% trans 'no' %}
