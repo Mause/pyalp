@@ -16,11 +16,6 @@ from listjs.widgets import ListJSWidget
 from pizza.models import PizzaOrder, Pizza
 
 
-def admin_pizza(request):
-    return render_to_response(
-        'admin_pizza.html',
-        context_instance=request
-    )
 
 
 def admin_pizza_list(request):
@@ -99,13 +94,6 @@ def admin_pizza_list(request):
     return render_to_response(
         'admin_pizza_list.html',
         context,
-        context_instance=request
-    )
-
-
-def chng_pizza(request):
-    return render_to_response(
-        'chng_pizza.html',
         context_instance=request
     )
 
