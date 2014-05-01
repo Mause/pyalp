@@ -16,13 +16,6 @@ from listjs.widgets import ListJSWidget
 from pizza.models import PizzaOrder, Pizza
 
 
-def index(request):
-    return render_to_response(
-        'index.html',
-        context_instance=request
-    )
-
-
 def admin_pizza(request):
     return render_to_response(
         'admin_pizza.html',
