@@ -19,24 +19,21 @@
 {% endrelatedlinksgroup %}
 
 
-$x->start_elements();
-$x->add_selectlist("pizzaid",1,1,0,get_lang('desc_pizzaid')." (<a href=\"pizza_list.php\">".get_lang('link_pizza_list')."</a>)",array("empty" => get_lang('error_pizzaid')),"SELECT pizzaid,pizza FROM pizza WHERE enabled='1'","pizzaid","pizza",1);
-$x->add_text("quantity",1,1,0,get_lang('desc_quantity'),array("empty" => get_lang('error_quantity')),10);
-$x->add_selectlist("userid",1,1,0,get_lang('desc_userid'),array(),"SELECT userid,username FROM users WHERE userid='".$_COOKIE["userid"]."'","userid","username",0);
-global $master;
-if ($master['pizza_orders_lock']) {
-	$x->display_slim(get_lang('pizzas_locked'));
-} elseif(empty($_POST)&&$x->is_secure()&&$toggle['foodrun']&&!$master['pizza_orders_lock ']) {
-	$x->display_top();
-	$x->display_form();
-	?>
-	mod_pizza v 1.9 by <a href="http://www.morb.ath.cx/alp/">sKuLLsHoT</a>
-	<?php
-	$x->display_bottom();
-} elseif(!empty($_POST)&&$x->is_secure()&&$toggle['foodrun']) {
-	$x->display_results();
-} else {
-	$x->display_slim(get_lang('noauth'));
-}
+{% if model %}
+    <p>
+        {{model.quantity}} {{model.pizza}} by {{model.orderer.username}}
+        <br/>
+        <a href="/pizza/">Make another order</a>
+    </p>
+{% else %}
+    <form method="post">
+        {% csrf_token %}
+    	{{order_form.as_p}}
+    	<input type="submit" value="Place order">
+    </form>
+{% endif %}
+
+
+mod_pizza v 1.9 by <a href="http://www.morb.ath.cx/alp/">sKuLLsHoT</a>
 
 {% endblock %}
