@@ -8,11 +8,14 @@ urlpatterns = patterns(
 
     url(r'^$', views.pizza),
     url(r'^list$', views.pizza_list),
-    url(r'^admin/pizza_list$', views.admin_pizza_list),
 
     # these are going to be implemented in the Django admin interface
     url(r'^admin/pizza$', redirect('/admin/pizza/pizzaorder')),
     url(r'^chng_pizza$', redirect('/admin/pizza/pizza'))
+    url(
+        r'^admin/pizza_list/$',
+        redirect('/admin/pizza/pizzaorder/order_summary/')
+    )
 )
 
 
