@@ -9,9 +9,12 @@ class ListJSWidget(widgets.Widget):
     class Media:
         js = ("%s%s?v=1" % (settings.STATIC_URL, "js/list.js"),)
 
-    def __init__(self, values, valueNames, show_totals=False, *args, **kwargs):
+    def __init__(
+            self, values, valueNames, show_totals=False, name='summary',
+            *args, **kwargs
+            ):
         self.values = values
-        self.name = 'summary'
+        self.name = name
         self.valueNames = valueNames
         self.show_totals = show_totals
 
