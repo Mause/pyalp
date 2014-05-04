@@ -121,6 +121,9 @@ class Common(Configuration):
         'django.contrib.messages.middleware.MessageMiddleware',
         'django.middleware.clickjacking.XFrameOptionsMiddleware',
         # 'debug_toolbar.middleware.DebugToolbarMiddleware'
+
+        'common.middleware.query_count.QueryCountDebugMiddleware',
+        'common.middleware.request_time.TimerMiddleware'
     ]
 
     ROOT_URLCONF = 'pyalp.urls'
