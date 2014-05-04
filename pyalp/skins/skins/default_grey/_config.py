@@ -68,7 +68,7 @@ def config(vars):
     container['title_menu'] = 'left'
 
     # display index.php modules on left or right of body.
-    container['index_modules'] = 'right'
+    container['index_modules'] = 'left'
 
     # these are the modules displayed.  if you delete a module from below, it
     # will not show up on ALP. this also controls the order of the modules.

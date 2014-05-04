@@ -1,6 +1,7 @@
 {% load staticfiles %}
 {% load spacer %}
 {% load debugger %}
+{% load cp_menu %}
 
 <table
 	border="0"
@@ -40,7 +41,7 @@
 					<br />
 				</td>
 				<td align="right">
-					<!-- {!% cp_menu %} --> <!-- //include/_functions.php ?> -->
+					{% cp_menu %}
 					{% spacer skin.container.horizontalpadding 1 1 %}
 				</td>
 			</tr>
