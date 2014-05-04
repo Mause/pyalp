@@ -1,0 +1,132 @@
+{% load spacer %}
+{% load trans %}
+{% load cp_menu %}
+
+<table border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#000000">
+  <tr>
+    <td width="980">
+      <table border="0" cellpadding="0" cellspacing="0" width="100%">
+        <tr>
+          <td valign="middle" align="left">
+            <nobr>
+            <!-- {!% spacer skin.container.leftmodule + skin.container.horizontalpadding 1 1 %} -->
+            {% spacer 14 %}
+
+            <a href="index.php" class="menu">
+              <b>
+                {{ lan.name }}
+              </b>
+            </a>
+            {% spacer 36 %}
+          </td>
+          <td valign="middle" width="100%">
+            <div id="topmenu">
+              {% spacer 1 10 1 %}
+              <font class="sm">
+                {% if not ALP_TOURNAMENT_MODE %}
+                  <a href="index.php" class="menu" style="color: #ffffff">
+                    <strong>
+                      {% trans 'home' %}
+                    </strong>
+                  </a>
+                {% endif %}
+                {% if flags.files and not ALP_TOURNAMENT_MODE %}
+                  {% spacer 18 %}
+                  <a href="files.php" class="menu" style="color: #ffffff">
+                    <strong>
+                      {% trans 'files' %}
+                    </strong>
+                  </a>
+                {% endif %}
+                {% if flags.seating and not ALP_TOURNAMENT_MODE %}
+                  {% spacer 18 %}
+                  <a href="seating.php" class="menu" style="color: #ffffff">
+                    <strong>
+                      {% trans 'map' %}
+                    </strong>
+                  </a>
+                {% endif %}
+                {% if flags.music and not ALP_TOURNAMENT_MODE %}
+                  {% spacer 18 %}
+                  <a href="music.php" class="menu" style="color: #ffffff">
+                    <strong>
+                      {% trans 'music' %}
+                    </strong>
+                  </a>
+                {% endif %}
+                {% if flags.schedule %}
+                  {% spacer 18 %}
+                  <a href="disp_schedule.php" class="menu" style="color: #ffffff">
+                    <strong>
+                      {% trans 'schedule' %}
+                    </strong>
+                  </a>
+                {% endif %}
+                {% if flags.servers and ALP_TOURNAMENT_MODE_COMPUTER_GAMES %}
+                  {% spacer 18 %}
+                  <a href="servers.php" class="menu" style="color: #ffffff">
+                    <strong>
+                      {% trans 'servers' %}
+                    </strong>
+                  </a>
+                {% endif %}
+                {% spacer 18 %}
+                  <a href="tournaments.php" class="menu" style="color: #ffffff">
+                    <strong>
+                      {% trans 'tournaments' %}
+                    </strong>
+                  </a>
+                {% if flags.sponsors and not ALP_TOURNAMENT_MODE %}
+                  {% spacer 18 %}
+                  <a href="disp_sponsors.php" class="menu" style="color: #ffffff">
+                    <strong>
+                      {% trans 'sponsors' %}
+                    </strong>
+                  </a>
+                {% endif %}
+                {% if not ALP_TOURNAMENT_MODE and flags.staff %}
+                  {% spacer 18 %}
+                  <a href="staff.php" class="menu" style="color: #ffffff">
+                    <strong>
+                      {% trans 'staff' %}
+                    </strong>
+                  </a>
+                {% endif %}
+                {% if not ALP_TOURNAMENT_MODE %}
+                  {% spacer 18 %}
+                  <a href="users.php" class="menu" style="color: #ffffff">
+                    <strong>
+                      {% trans 'users' %}
+                    </strong>
+                  </a>
+                {% endif %}
+              </font>
+              <br />
+              {% spacer 1 10 1 %}
+            </div>
+          </td>
+          <td align="right" valign="middle" class="smm">
+            <nobr>
+            {% spacer 1 10 1 %}
+            {% cp_menu %}
+            {% spacer skin.container.horizontalpadding 1 1 %}
+            {% spacer 1 10 1 %}
+          </td>
+        </tr>
+      </table>
+      {% spacer 980 1 1 %}
+    </td>
+    <td width="100%"><img src="/static/img/pxt.gif"/><!-- {!% spacer %}--></td>
+  </tr>
+</table>
+<br />
+<table border="0" cellpadding="0" cellspacing="0" width="980" bgcolor="{{ skin.colors.background }}">
+  <tr>
+    <td>
+      {% spacer 1 skin.container.verticalpadding %}
+      <table border="0" cellpadding="0" cellspacing="0" width="100%">
+        <tr>
+          <td width="{{ modules.get_width_left }}" valign="top">
+            {{ modules.display_modules_left }}
+          </td>
+          <td width="100%" valign="top">
