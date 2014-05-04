@@ -12,4 +12,12 @@
         <link rel="shortcut icon" href="favicon.ico" />
         <link rel="stylesheet" type="text/css" href="{% static 'css/x.css' %}">
     </head>
-    <body>
+    <body
+        text="{{ skin.colors.text }}"
+        link="{{ skin.colors.text }}"
+        alink="{{ skin.colors.text }}"
+        vlink="{{ skin.colors.text }}"
+        bgcolor="{{ skin.colors.background }}"
+        {% if skin.images.background %}
+        background="{{ skin.images.background }}"
+        {% endif %}>
