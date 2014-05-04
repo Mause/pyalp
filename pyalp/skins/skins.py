@@ -1,7 +1,6 @@
 from os.path import join, exists, basename
 
 from PIL import Image
-from django.template.loader import render_to_string
 
 from pyalp.config import get_config
 
@@ -33,35 +32,6 @@ class Skin(object):
             key: 'img/' + val
             for key, val in config.skin['images'].items()
         }
-
-    def get_arrow(self, type='off'):
-        tempurl = self.images['arrow_' + type]
-
-        width, height = self.getimagesize(
-            join(self.asset_path, tempurl)
-        )
-
-        context = {'tempurl': tempurl, 'width': width, 'height': height}
-        return render_to_string('arrow.html', context)
-
-    def get_go(self, url):
-        tempurl = self.images['go']
-        width, height = self.getimagesize(tempurl)
-
-        go = """
-        &nbsp; \
-        <a href="{url}">
-            <img \
-                src="{tempurl}" \
-                width="{width}" \
-                height="{height}" \
-                border="0" \
-                alt="go" \
-                align="absmiddle" \
-            />
-        </a>
-        """.format(url=url, tempurl=tempurl, width=width, height=height)
-        return go
 
     def mini_menu(self):
         # global tree
