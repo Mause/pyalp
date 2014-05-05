@@ -34,7 +34,6 @@ class Skin(object):
         }
 
     def mini_menu(self):
-        # global tree
         menu = []
         filename = basename(__file__)
         save = -1

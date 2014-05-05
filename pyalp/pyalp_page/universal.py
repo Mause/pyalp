@@ -72,8 +72,6 @@ class UniversalView(Form):
         self._crutch = 0
         self._delmod_query = ''
 
-    def _(self, const):
-        return trans_standalone({}, const)
 
     def database(self, table, id, order):
         self._table_name = table

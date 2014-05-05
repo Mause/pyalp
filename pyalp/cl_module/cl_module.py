@@ -145,8 +145,6 @@ class ModuleManager(object):
 
             return render_to_string('display_all_modules.html', context)
         elif side != 'main':
-            import pudb
-            pudb.set_trace()
             node = SpacerNode.init_lit(
                 self.skin.container['horizontalpadding']
             )

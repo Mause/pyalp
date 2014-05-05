@@ -219,7 +219,3 @@ class AdminToggleView(CreateView):
                 Flag(name=name, enabled=val).save()
 
 
-    # @method_decorator(login_required)
-    # @permission_required('flags.can_change_flags')
-    # def dispatch(self, *args, **kwargs):
-    #     return super(AdminToggleView, self).dispatch(*args, **kwargs)
