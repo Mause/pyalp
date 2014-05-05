@@ -9,7 +9,7 @@ from common.generic_template_tag import GenericTemplateTag
 class SpacerNode(GenericTemplateTag):
     template = 'spacer.html'
 
-    def __init__(self, width=1, height=1, br=False, align='""'):
+    def __init__(self, width=1, height=1, br=False, align=''):
         self.width = width
         self.height = height
         self.br = br
