@@ -1,6 +1,5 @@
 from django import template
 
-register = template.Library()
 
 from pyalp_page.module_node import ModuleNode
 
@@ -12,6 +11,5 @@ class EndModuleNode(ModuleNode):
         super().__init__(module_type=module_type, bgcolor=bgcolor)
 
 
-@register.tag
-def end_module(parser, token):
-    return EndModuleNode()
+register = template.Library()
+register.tag('end_module', EndModuleNode.invoke)

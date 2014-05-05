@@ -3,12 +3,12 @@
 from django import template
 from django.template.loader import render_to_string
 
-from pyalp.utils import split_contents
-
-register = template.Library()
+from common.generic_template_tag import GenericTemplateTag
 
 
-class SpacerNode(template.Node):
+class SpacerNode(GenericTemplateTag):
+    template = 'spacer.html'
+
     def __init__(self, width=1, height=1, br=False, align='""'):
         self.width = width
         self.height = height
@@ -48,12 +48,7 @@ class SpacerNode(template.Node):
         )
 
 
-@register.tag
-def spacer(parser, ttoken):
-    tokens = split_contents(ttoken, 4)
-    tokens = map(str, tokens)
-    tokens = map(template.Variable, tokens)
 
-    width, height, br, align = list(tokens)
 
-    return SpacerNode(width, height, br, align)
+register = template.Library()
+register.tag('spacer', SpacerNode.invoke)

@@ -9,6 +9,4 @@ class StartModuleNode(ModuleNode):
     template_name = 'start_module.html'
 
 
-@register.tag
-def start_module(parser, token):
-    return StartModuleNode()
+register.tag('start_module', StartModuleNode.invoke)
