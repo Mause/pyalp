@@ -15,17 +15,6 @@ class SpacerNode(GenericTemplateTag):
         self.br = br
         self.align = align
 
-    @classmethod
-    def init_lit(self, width=1, height=1, br=False, align='""'):
-        import pudb
-        pudb.set_trace()
-        width = template.Variable(str(width))
-        height = template.Variable(str(width))
-        br = template.Variable(str(br))
-        align = template.Variable(str(align))
-
-        return SpacerNode(width, height, br, align)
-
     def render(self, context):
         "returns a width x height pixel image."
 

@@ -145,7 +145,7 @@ class ModuleManager(object):
 
             return render_to_string('display_all_modules.html', context)
         elif side != 'main':
-            node = SpacerNode.init_lit(
+            node = SpacerNode(
                 self.skin.container['horizontalpadding']
             )
             return node.render({})
