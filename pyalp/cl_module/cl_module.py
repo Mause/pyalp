@@ -1,10 +1,7 @@
 from os.path import exists
 
-from django.template.loader import render_to_string
 
 from pyalp.skin import get_skin
-
-from pyalp_page.templatetags.spacer import SpacerNode
 
 
 class Module(object):
@@ -25,19 +22,7 @@ class Module(object):
 
         self.skin = get_skin()
 
-    def display_module(self, overwrite=''):
-        # global container
-        var = self.current_security_level() >= self.get_security()
-        if var:
-            if overwrite:
-                loc = overwrite
-            else:
-                if self.get_type() != "":
-                    loc = self.get_type()
-                else:
-                    loc = self._loc
-
-            return render_to_string('display_module.html', {'loc': loc})
+    # display module got re-implemented as template tag
 
     def get_inner_width(self):
         # global master, container
