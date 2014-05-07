@@ -77,18 +77,31 @@ class ModuleManager(object):
 
         self.skin = get_skin()
 
-    def add_module(self, n='', l='', sec=0, st='', sl=0, link='', type=''):
-        # adds a module to the manager
-        mod = Module(n, l, sec, st, sl, link, type)
+    def add_module(
+            self, name='', loc='', security_level=0,
+            string='', isSlim=0, link='', module_type=''):
+        "adds a module to the manager"
+        mod = Module(
+            name,
+            loc,
+            security_level,
+            string,
+            isSlim,
+            link,
+            module_type
+        )
 
-        if l == 'left':
+        if loc == 'left':
             self.leftModules.append(mod)
 
-        if l == 'right':
+        elif loc == 'right':
             self.rightModules.append(mod)
 
-        if l == 'main':
+        elif loc == 'main':
             self.mainModules.append(mod)
+
+        else:
+            raise Exception('Invalid location {}'.format(loc))
 
     def get_width(self, side=None):
         if self.rightModules:
