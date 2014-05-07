@@ -1,14 +1,14 @@
 import importlib
 
 from django import template
-from django.utils.text import unescape_string_literal
 
 from pyalp_translation.customization import GetTexter
+from common.generic_template_tag import GenericTemplateTag
 
 register = template.Library()
 
 
-class TransNode(template.Node):
+class TransNode(GenericTemplateTag):
     def __init__(self, s):
         self.s = s
 
@@ -21,6 +21,9 @@ class TransNode(template.Node):
         return importlib.__import__(app_name)
 
     def render(self, context):
+        self.s = self.resolve(context, self.s)
+        assert not hasattr(self.s, 'resolve')
+
         if 'page_context' in context:
             return GetTexter(context['page_context'])(self.s)
         else:
@@ -39,23 +42,6 @@ class TransNode(template.Node):
             return custom_gettext(self.s)
 
 
-def trans_standalone(context, s):
-    return TransNode(s).render(context)
-
-
-def get_const_name(token):
-    try:
-        # split_contents() knows not to split quoted strings.
-        tag_name, arg = token.split_contents()
-    except ValueError:
-        token = token.contents.split()[0]
-        raise template.TemplateSyntaxError(
-            "{} tag requires a single argument".format(token)
-        )
-
-    return unescape_string_literal(arg)
-
-
 @register.tag
 def trans(parser, token):
     """
@@ -68,6 +54,5 @@ def trans(parser, token):
         {% trans "key" %}
 
     """
-    const_name = get_const_name(token)
 
-    return TransNode(const_name)
+    return TransNode.invoke(parser, token)
