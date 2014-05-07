@@ -32,9 +32,14 @@ class Skin(object):
 
     @property
     def images(self):
+        if exists(join(self.asset_path, 'img')):
+            prefix = 'img'
+        else:
+            prefix = ''
+
         return {
-            key: 'img/' + val
-            for key, val in config.skin['images'].items()
+            key: join(prefix, val)
+            for key, val in self.config.skin['images'].items()
         }
 
     def mini_menu(self):
