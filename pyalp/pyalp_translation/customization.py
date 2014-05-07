@@ -37,3 +37,7 @@ class GetTexter(object):
 
 def custom_gettext(context_name):
     return GetTexter(context_name)
+
+
+def gettext(context_name, path):
+    return custom_gettext(context_name)(path)
