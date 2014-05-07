@@ -2,6 +2,12 @@ from django import template
 from django.template.loader import render_to_string
 
 
+def split_into_variables(token):
+    # split and remove name
+    tokens = token.split_contents()[1:]
+    return map(template.Variable, tokens)
+
+
 class GenericTemplateTag(template.Node):
     def __init__(self, *args, **kwargs):
         raise NotImplementedError(self)
@@ -17,12 +23,10 @@ class GenericTemplateTag(template.Node):
 
     @classmethod
     def invoke(cls, parser, token):
-        # split and remove names
-        tokens = token.split_contents()[1:]
-        tokens = map(template.Variable, tokens)
+        variables = split_into_variables(token)
 
         try:
-            return cls(*tokens)
+            return cls(*variables)
         except TypeError as e:
             if e.args[0].startswith('__init__'):
                 message = 'Bad arguments for {}: {}'.format(cls, e)
