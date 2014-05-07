@@ -1,3 +1,6 @@
+from collections import OrderedDict
+
+
 def config(vars):
     # IF YOU ARE MAKING A CUSTOM SKIN, PLEASE INCLUDE WHAT VERSION OF ALP IT
     # WAS MADE FOR.
@@ -76,7 +79,7 @@ def config(vars):
     # array(location, type)
     # location options: 'left', 'right', or 'main'
     # type options: 'left', 'right', or 'main'
-    modulelist = {}
+    modulelist = OrderedDict()
     modulelist['mod_controlpanel'] = ['left', 'main']
     modulelist['mod_register'] = ['left', 'main']
     modulelist['mod_admincontrolpanel'] = ['left', 'main']
