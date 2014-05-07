@@ -4,8 +4,8 @@ from pyalp.php_load import load_lang_file
 
 locale_data = os.path.join(os.path.dirname(__file__), '..', 'locale_data')
 
-# lang = load_lang_file(os.path.join(locale_data, 'en.php'))
-lang = load_lang_file(os.path.join(locale_data, 'fr.php'))
+lang = load_lang_file(os.path.join(locale_data, 'en.php'))
+# lang = load_lang_file(os.path.join(locale_data, 'fr.php'))
 
 
 # this is really just one way of doing things; another would be via
