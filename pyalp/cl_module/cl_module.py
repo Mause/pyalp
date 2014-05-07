@@ -1,5 +1,4 @@
-from os.path import exists
-
+from os.path import exists, join
 
 from pyalp.skin import get_skin
 
@@ -32,24 +31,27 @@ class Module(object):
             dims = {}
             for side in sides:
                 key = 'mod' + side
-                if exists(self.skin.skin_name + 'mod'+side+'.gif'):
-                    temp = self.skin.getimagesize(
-                        self.skin.skin_name + key + '.gif'
-                    )
-                    dims[key] = temp[0]
+
+                path = join(
+                    self.skin.asset_path, 'img', key + '.gif'
+                )
+
+                if exists(path):
+                    width, _ = self.skin.getimagesize(path)
+                    dims[key] = width
                 else:
                     dims[key] = self.skin.container['border_width']
 
             extra = []
             if dims['modtl'] > dims['modbl'] or dims['modtl'] > dims['modbl']:
-                extra[0] = max(dims['modtl'], dims['modbl'])
+                extra.append(max(dims['modtl'], dims['modbl']))
             else:
-                extra[0] = dims['modtl']
+                extra.append(dims['modtl'])
 
             if dims['modtr'] > dims['modbr'] or dims['modtr'] > dims['modbr']:
-                extra[1] = max(dims['modtr'], dims['modbr'])
+                extra.append(max(dims['modtr'], dims['modbr']))
             else:
-                extra[1] = dims['modtr']
+                extra.append(dims['modtr'])
 
             px = (
                 self.skin.container[self.loc + 'module'] - 2 *
