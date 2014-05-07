@@ -25,9 +25,9 @@ class Module(object):
     # display module got re-implemented as template tag
 
     def get_inner_width(self):
-        # global master, container
         if self.loc != 'main':
             sides = ['tl', 'tr', 'bl', 'br']
+
             # the dims array in this case only stores widths
             dims = {}
             for side in sides:
@@ -41,20 +41,22 @@ class Module(object):
                     dims[key] = self.skin.container['border_width']
 
             extra = []
-            if(dims['modtl'] > dims['modbl'] or dims['modtl'] > dims['modbl']):
+            if dims['modtl'] > dims['modbl'] or dims['modtl'] > dims['modbl']:
                 extra[0] = max(dims['modtl'], dims['modbl'])
             else:
                 extra[0] = dims['modtl']
 
-            if(dims['modtr'] > dims['modbr'] or dims['modtr'] > dims['modbr']):
+            if dims['modtr'] > dims['modbr'] or dims['modtr'] > dims['modbr']:
                 extra[1] = max(dims['modtr'], dims['modbr'])
             else:
                 extra[1] = dims['modtr']
 
-            return (
+            px = (
                 self.skin.container[self.loc + 'module'] - 2 *
                 self.skin.container['horizontalmodulepadding'] - extra[0] -
-                extra[1] - 10) + 'px'
+                extra[1] - 10
+            )
+            return '{}px'.format(px)
         else:
             return '96%'
 
