@@ -1,0 +1,197 @@
+{% load staticfiles %}
+{% load spacer %}
+<!-- {!% load compressed %} -->
+<!-- {!% compressed_css 'colors' %} -->
+<!-- {!% compressed_js 'stats' %} -->
+
+<table
+    border="0" cellpadding="0" cellspacing="0"
+    width="{{ width }}" {% if align %} align="{{align}}" {% endif %}
+    >
+
+    <tr>
+        {% if skin.container.border_height > 0 %}
+            {% if skin.container.border_width > 0 %}
+                {% if type == 'right' or type == 'main' %}
+                    <td
+                        bgcolor="{{ dims.modtl.bgcolor }}"
+                        width="{{ dims.modtl.width }}"
+                        height="{{ dims.modtl.height }}">
+                            <img
+                                src="{% static dims.modtl.img %}"
+                                width="{{ dims.modtl.width }}"
+                                height="{{ dims.modtl.height }}"
+                                border="0" alt="" />
+                    </td>
+                {% endif %}
+            {% endif %}
+        {% endif %}
+
+        <td
+            bgcolor="{{ dims.modt.bgcolor }}"
+            colspan="3"
+            height="{{ dims.modt.height }}"
+            {% if imgs.modt %}
+                background="{% static dims.modt.img %}"
+            {% endif %}
+            >
+                {% spacer "100%" dims.modt.height %}
+        </td>
+
+        {% if skin.container.border_width > 0 %}
+            {% if type == 'left' or type == 'main' %}
+                <td
+                    bgcolor="{{ dims.modtr.bgcolor }}"
+                    width="{{ dims.modtr.width }}"
+                    height="{{ dims.modtr.height }}">
+                        <img
+                            src="{% static dims.modtr.img %}"
+                            width="{{ dims.modtr.width }}"
+                            height="{{ dims.modtr.height }}"
+                            border="0"
+                            alt=""
+                        />
+                </td>
+            {% endif %}
+        {% endif %}
+    </tr>
+
+    <tr>
+        {% if skin.container.border_width > 0 %}
+            {% if type == "right" or type == "main" %}
+                <td
+                    bgcolor="{{ dims.modlside.bgcolor }}"
+                    rowspan="{{ rowspan }}" width="{{ dims.modlside.width }}"
+                    height="1"
+                    {% if imgs.modlside %}
+                        background="{% static dims.modlside.img %}"
+                    {% endif %}
+                    >
+                        {% spacer dims.modlside.width 1 %}
+                </td>
+            {% endif %}
+        {% endif %}
+
+        <td
+            colspan="3"
+            width="1"
+            height="{{ skin.container.verticalmodulepadding }}"
+            bgcolor="{{ current_color }}">
+                {% spacer 1 skin.container.verticalmodulepadding %}
+        </td>
+
+        {% if skin.container.border_width > 0 %}
+            {% if type == "left" or type == "main" %}
+                <td
+                    bgcolor="{{ dims.modrside.bgcolor }}"
+                    rowspan="{{ rowspan }}"
+                    width="{{ dims.modrside.width }}"
+                    height="1"
+                    {% if imgs.modrside %}
+                        background="{% static dims.modrside.img %}"
+                    {% endif %}
+                    >
+                        {% spacer dims.modrside.width 1 %}
+                </td>
+            {% endif %}
+        {% endif %}
+    </tr>
+
+    {% if string %}
+        <tr>
+            <td
+                colspan="3"
+                bgcolor="{{ skin.colors.cell_title }}"
+                class="celltitle">
+                    {% spacer 5 1 %}
+                    <font color="{{ skin.colors.text }}">
+                        <b>
+                            {% if link %}<a href="{{link}}" class="menu">{% endif %}
+                                {{ string }}
+                            {% if link %}&nbsp;&laquo;&laquo;&laquo;</a>{% endif %}
+                        </b>
+                    </font>
+                    <br />
+            </td>
+        </tr>
+        <tr>
+            <td
+                colspan="3"
+                width="1"
+                height="{{ skin.container.verticalmodulepadding }}"
+                bgcolor="{{ current_color }}">
+                    {% spacer 1 skin.container.verticalmodulepadding %}
+            </td>
+        </tr>
+    {% endif %}
+
+    <tr>
+        <td
+            width="{{ skin.container.horizontalmodulepadding }}"
+            height="1"
+            bgcolor="{{ current_color }}">
+                {% spacer skin.container.horizontalmodulepadding 1%}
+        </td>
+        <td width="100%" valign="top" bgcolor="{{ current_color }}">
+
+
+            {{ module_contents }}
+
+
+        </td>
+        <td width="{{ skin.container.horizontalmodulepadding }}" bgcolor="{{ current_color }}">
+            <img src="/static/img/pxt.gif" width="{{ skin.container.horizontalmodulepadding }}" height="1" border="0" alt="" />
+        </td>
+    </tr>
+    <tr>
+        <td colspan="3" width="1" height="{{ skin.container.verticalmodulepadding }}" bgcolor="{{ current_color }}">
+            <img src="/static/img/pxt.gif" width="1" height="{{ skin.container.verticalmodulepadding }}" border="0" alt="" /><br />
+        </td>
+    </tr>
+
+    {% if skin.container.border_height > 0 %}
+        <tr>
+            {% if skin.container.border_width > 0 %}{% if type == "right" or type == "main" %}
+                <td
+                    bgcolor="{{ dims.modbl.bgcolor }}"
+                    width="{{ dims.modbl.width }}"
+                    height="{{ dims.modbl.height }}">
+
+                    <img
+                        src="{% static dims.modbl.img %}"
+                        width="{{ dims.modbl.width }}"
+                        height="{{ dims.modbl.height }}"
+                        border="0" alt="" />
+                </td>
+            {% endif %}{% endif %}
+            <td
+                bgcolor="{{ dims.modb.bgcolor }}"
+                colspan="3"
+                {% if imgs.modb %}
+                    background="{% static dims.modb.img %}"
+                {% endif %}
+                >
+                <img src="/static/img/pxt.gif" width="100%" height="{{ dims.modb.height }}" border="0" alt="">
+            </td>
+
+            {% if skin.container.border_width > 0 %}
+            {% if type == 'left' or type == 'main' %}
+                <td
+                    bgcolor="{{ dims.modbr.bgcolor }}"
+                    width="{{ dims.modbr.width }}"
+                    height="{{ dims.modbr.height }}">
+
+                    <img
+                        src="{% static dims.modbr.img %}"
+                        width="{{ dims.modbr.width }}"
+                        height="{{ dims.modbr.height }}"
+                        border="0" alt=""
+                    />
+                </td>
+            {% endif %}{% endif %}
+        </tr>
+    {% endif %}
+    <!--<tr><td colspan="<?php print ($type == 'left' || $type == 'right' ? '5' : '7') ?>" width="1" height="<?php echo $container['horizontalpadding']; ?>"><img src="img/pxt.gif" width="1" height="<?php echo $container['horizontalpadding']; ?>" border="0" alt="" /></td></tr>-->
+
+</table>
+<img src="/static/img/pxt.gif" border="0" width="1" height="{{ skin.container.verticalpadding }}" alt="" /><br />
