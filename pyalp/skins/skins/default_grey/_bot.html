@@ -1,7 +1,9 @@
-                    {{ modules.display_modules_main }}
+{% load display_all_modules %}
+
+                    {% display_all_modules 'main' %}
                     </td>
                     <td width="{{ modules.get_width.right }}" valign="top">
-                        {{ modules.display_modules_right }}
+                        {% display_all_modules 'right' %}
                     </td>
                 </tr>
             </table>
