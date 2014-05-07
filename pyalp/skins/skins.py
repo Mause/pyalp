@@ -27,6 +27,10 @@ class Skin(object):
         return self.config.skin['container']
 
     @property
+    def modulelist(self):
+        return self.config.modulelist
+
+    @property
     def images(self):
         return {
             key: 'img/' + val
