@@ -90,56 +90,6 @@ class ModuleManager(object):
         if l == 'main':
             self.mainModules.append(mod)
 
-    def display_all_modules(self, side):
-        raise Exception('Use the appropriate method directly')
-
-    def display_modules_right(self):
-        return self.display_modules_for_side(
-            self.rightModules,
-            'right',
-            self.skin.container['rightmodule']
-        )
-
-    def display_modules_main(self):
-        return self.display_modules_for_side(
-            self.mainModules,
-            'main'
-        )
-
-    def display_modules_left(self):
-        return self.display_modules_for_side(
-            self.leftModules,
-            'left',
-            self.skin.container['leftmodule']
-        )
-
-    def display_modules_for_side(self, modules, side, width_modules=0):
-        "displays all the modules for a side."
-
-        if modules:
-            types = {
-                'left': 0,
-                'right': 0,
-                'main': 0
-            }
-
-            for mod in modules:
-                types[mod.get_type()] += 1
-
-            context = {
-                'modules': self,
-                'width_modules': width_modules
-            }
-
-            return render_to_string('display_all_modules.html', context)
-        elif side != 'main':
-            node = SpacerNode(
-                self.skin.container['horizontalpadding']
-            )
-            return node.render({})
-        else:
-            return ''
-
     def get_width(self, side=None):
         if self.rightModules:
             right = (
