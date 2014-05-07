@@ -1,0 +1,78 @@
+{% load spacer %}
+{% load staticfiles %}
+
+{% if toppadding > 0 %}
+    {% spacer 1 toppadding 1 %}
+{% endif %}
+
+<table border="0" cellpadding="0"
+    cellspacing="{{ border }}"
+    {% if border > 0 %}
+        bgcolor="{{ bordercolor }}"
+    {% endif %}
+    width="{{ width }}{{widthpercent}}">
+        <tr>
+            {% if alignment == 'left' %}
+                {% if percent != 0 %}
+                    <td style="
+                        width: {{ width_firstpart }}{{widthpercent}};
+                        background-color: {{ filledcolor }};
+                        text-align: right;">
+                        {% if percent >= 0.85 %}
+                            <img src="{% static 'img/pxt.gif' %}" width="1" height="{{ height }}" border="0" align="absmiddle" alt="" />
+                            {% if labels %}
+                                <font class="sm" style="font-weight: bold"
+                                    color="{{ labelfilledcolor }}">
+                                        {{ display_percentage }}%&nbsp;
+                                </font>
+                            {% endif %}
+                        {% else %}
+                            {% spacer 1  height %}
+                        {% endif %}
+                    </td>
+                {% endif %}
+            {% endif %}
+            {% if percent != 1 %}
+                <td style="
+                    width: {{width_middlepart}}{{widthpercent}};
+                    background-color: {{ emptycolor }};
+                    text-align: {{ alignment }};"
+                    {% if background %}
+                    background="{% static emptybg %}"
+                    {% endif %}
+                    >
+                    {% if percent < 0.85 %}
+                        <img src="{% static 'img/pxt.gif' %}" width="1" height="{{ height }}" border="0" align="absmiddle" alt="" />
+                        {% if labels %}
+                            <font class="sm" style="font-weight: bold" color="{{ labelemptycolor }}">
+                                {% if alignment == 'left' %}&nbsp;{% endif %}
+                                {{display_percentage}}%
+                                {% if alignment == 'right' %}&nbsp;{% endif %}
+                            </font>
+                        {% endif %}
+                    {% else %}
+                        {% spacer 1 height %}
+                    {% endif %}
+                </td>
+            {% endif %}
+            {% if alignment == 'right' %}
+                {% if percent != 0 %}
+                    <td style="width: {{width_firstpart}}{{widthpercent}}; background-color: {{ filledcolor }}; text-align: left;">
+                        {% if percent >= 0.85 %}
+                            <img src="{% static 'img/pxt.gif' %}" width="1" height="{{ height }}" border="0" align="absmiddle" alt="" />
+                            {% if labels %}
+                                <font class="sm" style="font-weight: bold" color="{{ labelfilledcolor }}">
+                                    &nbsp;<?php echo round(self._percent*100,1); ?>%
+                                </font>
+                            {% endif %}
+                        {% else %}
+                            {% spacer 1 height %}
+                        {% endif %}
+                    </td>
+                {% endif %}
+            {% endif %}
+        </tr>
+</table>
+{% if bottompadding > 0 %}
+    {% spacer 1 bottompadding 1 %}
+{% endif %}
