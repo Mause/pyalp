@@ -2,6 +2,7 @@ from os.path import join, exists
 import importlib
 import logging
 import warnings
+from collections import OrderedDict
 
 from django.conf import settings
 
@@ -26,8 +27,14 @@ class Config(object):
             settings.SKIN_DIR,
             self.skin['skin_name']
         )
+        self.modulelist = OrderedDict()
 
         self.load_skin_config()
+
+        assert isinstance(self.modulelist, OrderedDict), (
+            'For ordering purposes, the module list must be an '
+            'OrderedDict instance'
+        )
 
     def load_skin_config(self):
         if exists(self.py_skin_config_path):
@@ -44,6 +51,7 @@ class Config(object):
                 logging.exception(e)
             else:
                 self.skin.update(config['skin'])
+                self.modulelist.update(config['modulelist'])
 
         elif exists(self.php_skin_config_path):
             logging.debug('Loading php config file for theme "{}"'.format(
@@ -57,6 +65,7 @@ class Config(object):
             else:
                 del config['ALP_TOURNAMENT_MODE']
                 self.skin.update(config)
+                self.modulelist.update(config['modulelist'])
 
         else:
             raise Exception('Derp')
