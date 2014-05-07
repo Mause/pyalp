@@ -4,19 +4,18 @@ from pyalp.skin import get_skin
 
 
 class Module(object):
-    # stores data for a single module
-    # var _name, _loc, _str, _link, _sec, _isSlim, _isOpen, _type
+    "stores data for a single module"
 
-    def __init__(self, n='', l='main', sec=1,
-                 st='', sl=0, link='', module_type=''):
-        # constructor
-        self.name = n
-        self.loc = l
-        self.str = st
+    def __init__(
+            self, name='', loc='main', security_level=1,
+            string='', isSlim=False, link='', module_type=''):
+        self.name = name
+        self.loc = loc
+        self.string = string
         self.link = link
-        self.sec = sec
-        self.isSlim = sl
-        self.isOpen = 1
+        self.security_level = security_level
+        self.isSlim = isSlim
+        self.isOpen = True
         self.module_type = module_type
 
         self.skin = get_skin()
