@@ -91,11 +91,13 @@ def pizza_list(request):
     valueNames = ['pizza', 'description', 'price']
     pizzas = Pizza.objects.filter(enabled=True)
 
-    values = []
-    for pizza in pizzas:
-        values.append({})
-        for attr in valueNames:
-            values[-1][attr] = getattr(pizza, attr)
+    values = [
+        {
+            attr: getattr(pizza, attr)
+            for attr in valueNames
+        }
+        for pizza in pizzas
+    ]
 
     details = ListJSWidget(
         values=values,
