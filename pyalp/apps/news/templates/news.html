@@ -1,0 +1,75 @@
+{% load module %}
+{% load dotted_line %}
+{% load spacer %}
+{% load admin_urls %}
+{% load disp_datetime %}
+{% load markdown %}
+
+{% load staticfiles %}
+<link rel="stylesheet" type="text/css" href="{% static '/skins/x.css' %}">
+
+{% start_module %}
+    {% for behrow in query %}
+        <table border="0" cellpadding="0" cellspacing="0" width="100%">
+            <tr>
+                <td>
+                    <font color="{{ skin.colors.primary }}">
+                        <strong>{{ behrow.headline }}</strong>
+                        <br />
+                    </font>
+                </td>
+                <td>
+                    <div align="right">
+                        <font class="sm">
+                            <font color="{{ skin.colors.blended_text }}">
+                                [<strong>{{ behrow.author.username }}</strong>]
+                                [{% disp_datetime behrow.itemtime %}]
+                            </font>
+                            {% if perms.news. %}
+                                <span class="sm">&nbsp;[
+                                <strong>
+                                    <a href="{% url 'admin:news_newsitem_change' behrow.id %}">
+                                        admin
+                                    </a>
+                                </strong>
+                                ]</span>
+                            {% endif %}
+                            <br />
+                        </font>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    {{behrow.news_article|markdown|safe}}
+                </td>
+            </tr>
+        </table>
+        {% spacer 1 12 False %}<br />
+        {% dotted_line 4 4 %}
+        {% spacer 1 12 False %}<br />
+    {% endfor %}
+
+    {% if more_than_five %}
+        <div align="right">
+            <font class="sm">
+                [
+                    {% if showing_all %}
+                        <a href="/?all">
+                            <strong>
+                                hide old news
+                            </strong>
+                        </a>
+                    {% else %}
+                        <a href="/">
+                            <strong>
+                                view all news
+                            </strong>
+                        </a>
+                    {% endif %}
+                ]
+            </font>
+        </div>
+    {% endif %}
+
+{% end_module %}

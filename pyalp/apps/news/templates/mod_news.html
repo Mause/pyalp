@@ -1,0 +1,27 @@
+{% load spacer dotted_line markdown %}
+
+{% if news %}
+    <div class="sm" style="padding: 4px 4px 4px 4px">
+        {% for behrow in news %}
+            <font color="{{ skin.colors.primary }}">
+                <strong>
+                    {{ behrow.headline }}
+                </strong>
+                <br />
+            </font>
+            <font color="{{ skin.colors.blended_text }}" class="smm">
+                {{behrow.itemtime}}
+            </font>
+            <br />
+    <!--         $article = $behrow['news_article'];
+            $article = str_replace("&lt;","<",$article);
+            $article = str_replace("&gt;",">",$article);
+            $article = strip_tags($article,'<a><strong><b><i><u><font><img>');
+     -->
+            {{behrow.news_article|markdown|safe}}
+
+            {% spacer 1 6 1 %}
+            {% dotted_line 4 4 %}
+        {% endfor %}
+    </div>
+{% endif %}
