@@ -29,7 +29,8 @@ class Module(models.Model):
     required = models.CharField(max_length=45)
 
     def __str__(self):
-        return '{} at position {}'.format(
+        return '{} {} at position {}'.format(
+            'enabled' if self.enabled else 'disabled',
             self.name,
             self.ordernum
         )
