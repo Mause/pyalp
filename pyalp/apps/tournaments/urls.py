@@ -1,7 +1,7 @@
 from pyalp.utils import redirect
 from django.conf.urls import patterns, url
 
-from tournaments import views
+from . import views
 
 urlpatterns = patterns(
     '',

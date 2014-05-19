@@ -1,5 +1,5 @@
 
-from news.models import NewsItem
+from ..models import NewsItem
 
 from common.generic_template_tag import GenericTemplateTag
 

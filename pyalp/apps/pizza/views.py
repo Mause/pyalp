@@ -7,8 +7,9 @@ from django.shortcuts import redirect
 from listjs.widgets import ListJSWidget
 from chosen.fields import ChosenModelChoiceField
 
-from pizza import gettext as _
-from pizza.models import PizzaOrder, Pizza
+from . import gettext as _
+from .models import PizzaOrder, Pizza
+
 from flags.registry import get_flag_registry
 
 

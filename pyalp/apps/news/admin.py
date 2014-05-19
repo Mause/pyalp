@@ -4,8 +4,8 @@ from django.contrib.admin import widgets
 from django import forms
 
 # Register your models here.
-from news.models import NewsItem
-from news import gettext as _
+from .models import NewsItem
+from . import gettext as _
 
 
 class NewsItemForm(ModelForm):

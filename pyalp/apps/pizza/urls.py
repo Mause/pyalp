@@ -1,6 +1,6 @@
 from django.conf.urls import patterns, url
 
-from pizza import views
+from . import views
 from pyalp.utils import redirect
 
 urlpatterns = patterns(

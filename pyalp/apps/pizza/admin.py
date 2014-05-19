@@ -2,7 +2,7 @@ from django.contrib import admin
 from django import forms
 
 from pyalp.utils import render_to_response
-from pizza.models import Pizza, PizzaOrder
+from .models import Pizza, PizzaOrder
 
 from pyalp_translation.customization import custom_gettext
 _ = custom_gettext('admin_pizza_list')
