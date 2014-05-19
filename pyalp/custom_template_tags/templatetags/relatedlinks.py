@@ -1,14 +1,9 @@
-from collections import namedtuple
-
 from django import template
-from django.utils.text import unescape_string_literal
+from django.template.loader import render_to_string
 
 from pyalp.skin import get_skin
-from pyalp_translation.templatetags.trans import TransNode
 
 register = template.Library()
-
-Link = namedtuple('Link', 'name,url')
 
 
 class RelatedLinksGroupNode(template.Node):
@@ -17,48 +12,28 @@ class RelatedLinksGroupNode(template.Node):
         self.skin = get_skin()
 
     def render(self, context):
-        html = ""
-
         if self.related_links:
-            html += '<font class="sm"><strong>related links</strong> //<br />'
-
-            for link in self.related_links:
-                html += "&nbsp;" + self.skin.get_arrow()
-                html += '&nbsp;<a href="{}">'.format(link.url)
-
-                # $val[2]>2?'<strong>super </strong>':'')
-                # $val[2]>1?'<strong>administrator</strong>: ':'')
-
-                label = TransNode(link.label).render(context)
-                html += '{}</a><br />'.format(label)
-            html += "</font><br />"
-
-        return html
+            return render_to_string(
+                'relatedlinks.html',
+                {
+                    'links': self.related_links
+                },
+                context_instance=context
+            )
+        else:
+            return ''
 
 
-class RelatedLinkNode(template.Node):
+from common.generic_template_tag import GenericTemplateTag
+
+
+class RelatedLinkNode(GenericTemplateTag):
     def __init__(self, label, url):
         self.label = label
         self.url = url
 
 
-def get_args(token):
-    try:
-        # split_contents() knows not to split quoted strings.
-        tag_name, label, url = token.split_contents()
-    except ValueError:
-        token = token.contents.split()[0]
-        raise template.TemplateSyntaxError(
-            "{} tag requires two arguments".format(token)
-        )
-
-    return unescape_string_literal(label), unescape_string_literal(url)
-
-
-@register.tag
-def relatedlink(parser, token):
-    label, url = get_args(token)
-    return RelatedLinkNode(label, url)
+register.tag('relatedlink', RelatedLinkNode.invoke)
 
 
 @register.tag

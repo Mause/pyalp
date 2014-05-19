@@ -1,0 +1,16 @@
+{% load get_arrow trans %}
+
+<font class="sm"><strong>related links</strong> //<br />
+    {% for link in links %}
+        &nbsp;{% get_arrow %}
+        &nbsp;<a href="{{link.url}}">
+            <!--
+            # $val[2]>2?'<strong>super </strong>':'')
+            # $val[2]>1?'<strong>administrator</strong>: ':'')
+             -->
+            {% trans link.label %}
+        </a>
+        <br />
+    {% endfor %}
+
+</font><br />
