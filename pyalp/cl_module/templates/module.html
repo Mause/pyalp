@@ -140,12 +140,12 @@
 
         </td>
         <td width="{{ skin.container.horizontalmodulepadding }}" bgcolor="{{ current_color }}">
-            <img src="/static/img/pxt.gif" width="{{ skin.container.horizontalmodulepadding }}" height="1" border="0" alt="" />
+            <img src="{% static 'img/pxt.gif' %}" width="{{ skin.container.horizontalmodulepadding }}" height="1" border="0" alt="" />
         </td>
     </tr>
     <tr>
         <td colspan="3" width="1" height="{{ skin.container.verticalmodulepadding }}" bgcolor="{{ current_color }}">
-            <img src="/static/img/pxt.gif" width="1" height="{{ skin.container.verticalmodulepadding }}" border="0" alt="" /><br />
+            <img src="{% static 'img/pxt.gif' %}" width="1" height="{{ skin.container.verticalmodulepadding }}" border="0" alt="" /><br />
         </td>
     </tr>
 
@@ -171,7 +171,7 @@
                     background="{% static dims.modb.img %}"
                 {% endif %}
                 >
-                <img src="/static/img/pxt.gif" width="100%" height="{{ dims.modb.height }}" border="0" alt="">
+                <img src="{% static 'img/pxt.gif' %}" width="100%" height="{{ dims.modb.height }}" border="0" alt="">
             </td>
 
             {% if skin.container.border_width > 0 %}
@@ -194,4 +194,4 @@
     <!--<tr><td colspan="<?php print ($type == 'left' || $type == 'right' ? '5' : '7') ?>" width="1" height="<?php echo $container['horizontalpadding']; ?>"><img src="img/pxt.gif" width="1" height="<?php echo $container['horizontalpadding']; ?>" border="0" alt="" /></td></tr>-->
 
 </table>
-<img src="/static/img/pxt.gif" border="0" width="1" height="{{ skin.container.verticalpadding }}" alt="" /><br />
+<img src="{% static 'img/pxt.gif' %}" border="0" width="1" height="{{ skin.container.verticalpadding }}" alt="" /><br />
