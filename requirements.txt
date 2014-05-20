@@ -29,7 +29,7 @@ hiredis==0.1.1
 psycopg2==2.5.1
 
 # form stuff
-django-floppyforms==1.1
+django-floppyforms==1.1.1
 git+https://github.com/jakewins/django-money@8aeca9ea10a27ec1784d5faaba3e4c93a0c597c1#egg=django-money
 
 # model stuff
