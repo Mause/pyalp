@@ -1,7 +1,7 @@
 # generic
 Django==1.6.5
 django-configurations==0.8
-django-vanilla-views==1.0.2
+django-vanilla-views==1.0.3
 django-jsonify==0.2.1
 
 # debugging
