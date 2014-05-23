@@ -1,0 +1,22 @@
+{% load module %}
+
+{% include top %}
+{% include skin_top %}
+
+{% comment %}
+    we have to do this because we cannot close a template
+    block without having first closed every block contained
+    within
+{% endcomment %}
+
+{% if modjool %}
+    <!-- start module -->
+    {% start_module %}
+        {{ nodelist_rendered }}
+    {% end_module %}
+{% else %}
+    {{ nodelist_rendered }}
+{% endif %}
+
+{% include skin_bottom %}
+{% include bottom %}
