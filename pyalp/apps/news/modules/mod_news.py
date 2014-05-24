@@ -13,8 +13,7 @@ class NewsModule(object):
 
     def render(self, context):
         news = NewsItem.objects.filter(hide_item=False).order_by('itemtime')
-        # $news = $dbc->database_query("SELECT * FROM news WHERE hide_item=0
-            # ORDER BY itemtime DESC");
+        news = news.select_related('author')
 
         return render_to_string(
             'mod_news.html',

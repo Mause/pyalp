@@ -12,6 +12,7 @@ class NewsNode(GenericTemplateTag):
 
     def render(self, context):
         query = NewsItem.objects.exclude(hide_item=True).order_by('itemtime')
+        query = query.select_related('author')
 
         if self.resolve(context, self.all_news_items):
             query = query[:5]
