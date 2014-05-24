@@ -1,0 +1,1 @@
+from pyalp_translation.customization import custom_gettext

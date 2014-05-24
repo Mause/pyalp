@@ -1,0 +1,449 @@
+{% extends "base.html" %}
+{% load module item_block display disp_datetime spacer %}
+
+{% block content %}
+{% display_top %}
+    <!-- include "include/_universal.php"; -->
+    <!-- // $x = new universal("user bio","user bio",0); -->
+    {% if user_to_display %}
+        {% begitem user_to_display.username %}
+            {% if flags.marath %}
+                <!-- {!% start_module "main" "" "" "" "160" "right" %} -->
+                {% start_module %}
+                    <div align="center">
+                        <a href="themarathon.php">
+                            <b>
+                                the marathon
+                            </b>
+                        </a>
+                        <br />
+                        <br />
+                        <font class="sm">rank</font>
+                        <br />
+                        <font style="font: 40px Arial; font-weight: bold">
+                            {% if user_meta.marathon_rank %}
+                                {{ user_meta.marathon_rank }}
+                            {% else %}
+                                --
+                            {% endif %}
+                        </font>
+                        <br />
+                        <br />
+                        <font class="sm">total points</font><br />
+
+                        <font style="font: 40px Arial; font-weight: bold">
+                            {% if user_meta.marathon_points %}
+                                {{ user_meta.marathon_points }}
+                            {% endif %}
+                        </font>
+
+                        <br />
+                        <br />
+                        <font class="sm">tournament score</font><br />
+                        <font style="font: 40px Arial; font-weight: bold">
+                            {% if user_meta.marathon_points_tourney %}
+                                {{ user_meta.marathon_points_tourney }}
+                            {% endif %}
+                        </font>
+                        <br />
+                    </div>
+                {% end_module %}
+            {% endif %}
+
+            <table border="0">
+                <tr>
+                    <td>
+                        <a href="users.php?show=0" style="color: {{ skin.colors.blended_text }}">
+                            <font class="sm">real name</font>
+                        </a>
+                    </td>
+                    <td>
+                        {{ user_to_display.first_name }} {{ user_to_display.last_name }}
+                        <br />
+                    </td>
+                </tr>
+                {% if user_meta.gaming_group %}
+                    <tr>
+                        <td>
+                            <a href="users.php?show=0" style="color: {{ skin.colors.blended_text }}">
+                                <font class="sm">gaming group</font>
+                            </a>
+                        </td>
+                        <td>
+                            {{ user_meta.gaming_group }}
+                            <br />
+                        </td>
+                    </tr>
+                {% endif %}
+
+                {% if user_meta.quote %}
+                    <tr>
+                        <td>
+                            <font color="{{ skin.colors.blended_text }}" size="1">quote</font>
+                            <!-- </a> -->
+                        </td>
+                        <td>
+                            <i>{{ user_meta.quote }}</i>
+                            <br />
+                        </td>
+                    </tr>
+                {% endif %}
+
+                <!-- {!% if (( user.display_email and user.email )) or current_security_level >= 2 %} -->
+                {% if False %}
+                    <tr>
+                        <td>
+                            <a href="users.php?show=1" style="color: {{ skin.colors.blended_text }}">
+                                <font class="sm">email</font>
+                            </a>
+                        </td>
+                        <td>
+                            <a href="mailto:{{ user.email }}">
+                                {{ user.email }}
+                            </a>
+                            <br />
+                        </td>
+                    </tr>
+                {% endif %}
+
+                {% if user.gender %}
+                    <tr>
+                        <td>
+                            <a href="users.php?show=4" style="color: {{ skin.colors.blended_text }}">
+                                <font class="sm">gender</font>
+                            </a>
+                        </td>
+                        <td>
+                            {{ user.gender }}
+                            <br />
+                        </td>
+                    </tr>
+                {% endif %}
+
+                <tr>
+                    <td>
+                        <a href="users.php?show=8" style="color: {{ skin.colors.blended_text }}">
+                            <font class="sm">time of arrival</font>
+                        </a>
+                    </td>
+                    <td>
+                        {% disp_datetime metadata.date_of_arrival 0 %}
+                    </td>
+                </tr>
+
+                {% if metadata.date_of_departure %}
+                    <tr>
+                        <td>
+                            <a href="users.php?show=8" style="color: {{ skin.colors.blended_text }}">
+                                <font class="sm">time of departure</font>
+                            </a>
+                        </td>
+                        <td>
+                            {% disp_datetime metadata.date_of_departure 1 %}
+                        </td>
+                    </tr>
+                {% endif %}
+
+                {% if user.display_ip or current_security_level >= 2 %}
+                    <tr>
+                        <td>
+                            <a href="users.php?show=9" style="color: {{ skin.colors.blended_text }}">
+                                <font class="sm">ip address</font>
+                            </a>
+                        </td>
+                        <td>
+                            {{ user.recent_ip }}
+                            <br />
+                        </td>
+                    </tr>
+                {% endif %}
+
+                {% if user.room_loc and flags.seating %}
+                    <tr>
+                        <td>
+                            <a href="seating.php" style="color: {{ skin.colors.blended_text }}">
+                                <font class="sm">seating map</font>
+                            </a>
+                        </td>
+                        <td>
+                            <a href="seating.php?c={{ user.room_loc }}">
+                                find {{ user.username }}
+                            </a>
+                            <br />
+                        </td>
+                    </tr>
+                {% endif %}
+
+                {% if flags.gamerequests %}
+                    $gamerequest = $dbc->database_query("SELECT * FROM game_requests WHERE userid='".$row["userid"]."'");
+                    <tr>
+                        <td>
+                            <a href="gamerequest.php" style="color: {{ skin.colors.blended_text }}">
+                                <font class="sm">open play game requests</font>
+                            </a>
+                        </td>
+                        <td>
+                            <b>
+                                <?php echo ($dbc->database_num_rows($gamerequest)?$dbc->database_num_rows($gamerequest):0); ?>
+                            </b>
+                            <br />
+                        </td>
+                    </tr>
+                {% endif %}
+
+                {% if flags.foodrun %}
+                    $foodruns = $dbc->database_query("SELECT * FROM foodrun WHERE userid='".$row["userid"]."'");
+                    <tr>
+                        <td>
+                            <a href="disp_schedule.php" style="color: {{ skin.colors.blended_text }}">
+                                <font class="sm">food runs</font>
+                            </a>
+                        </td>
+                        <td>
+                            <b><?php echo ($dbc->database_num_rows($foodruns)?$dbc->database_num_rows($foodruns):0); ?></b>
+                            <br />
+                        </td>
+                    </tr>
+                {% endif %}
+
+                {% if flags.techsupport %}
+                    <tr>
+                        <td>
+                            <a href="techsupport.php" style="color: {{ skin.colors.blended_text }}">
+                                <font class="sm">tech support requests</font>
+                            </a>
+                        </td>
+                        <td>
+                            <b>
+                                {{ requests_made }}
+                            </b>
+                            <br />
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <a href="techsupport.php" style="color: {{ skin.colors.blended_text }}">
+                                <font class="sm">tech support requests solved</font>
+                            </a>
+                        </td>
+                        <td>
+                            <b>
+                                {{ requests_solved }}
+                            </b>
+                            <br />
+                        </td>
+                    </tr>
+                {% endif %}
+
+                {% if flags.filesharing %}
+                    <!-- include 'include/_gaming_rig_db.php'; -->
+                    {% if row.sharename %}
+                        <tr>
+                            <td>
+                                <a href="users.php?show=1" style="color: {{ skin.colors.blended_text }}">
+                                    <font class="sm">sharename</font>
+                                </a>
+                            </td>
+                            <td>
+                                {{ row.sharename }}
+                                <br />
+                            </td>
+                        </tr>
+                    {% endif %}
+
+                    {% if row.ftp_server %}
+                        <tr>
+                            <td>
+                                <a href="users.php?show=2" style="color: {{ skin.colors.blended_text }}">
+                                    <font class="sm">ftp_server</font>
+                                </a>
+                            </td>
+                            <td>
+                                {% if row.ftp_server %}
+                                    yes [<a href="ftp://{{ row.recent_ip }}"><font size="1"><b>connect</b></font></a>]
+                                {% else %}
+                                    no
+                                {% endif %}
+                                <br />
+                            </td>
+                        </tr>
+                    {% endif %}
+                {% endif %}
+
+                {% if flags.gamingrigs %}
+                    <tr>
+                        <td colspan="2">
+                            <br />
+                            <b>gaming rig</b>
+                            &nbsp;&nbsp;
+                            <font size="1">
+                                {% if user.is_authenticated %}
+                                    [ <a href="chng_userinfo.php"><b>modify own</b></a> ]
+                                {% endif %}
+                                &nbsp;&nbsp;
+                                [ <a href="users.php?show=5"><b>show all</b></a> ]
+                                <br />
+                            </font>
+                            <br />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            {% if row.comp_proc == 'AMD' %}
+                                <img src="<?php echo (file_exists($master['currentskin'].'amd.gif')?$master['currentskin'].'amd.gif':'img/rigs/amd.gif'); ?>" width="56" height="16" border="1" alt="amd">
+                                {% spacer 4 %}
+                            {% endif %}
+                            {% if row.comp_proc == 'Intel' %}
+                                <img src="<?php echo (file_exists($master['currentskin'].'intel.gif')?$master['currentskin'].'intel.gif':'img/rigs/intel.gif'); ?>" width="56" height="16" border="1" alt="intel">
+                                {% spacer 4 %}
+                            {% endif %}
+                            {% if row.comp_gfx_gpu == 'ATI' %}
+                                <img src="<?php echo (file_exists($master['currentskin'].'ati.gif')?$master['currentskin'].'ati.gif':'img/rigs/ati.gif'); ?>" width="23" height="16" border="1" alt="ati">
+                                {% spacer 4 %}
+                            {% endif %}
+                            {% if row.comp_gfx_gpu == 'Nvidia' %}
+                                <img src="<?php echo (file_exists($master['currentskin'].'nvidia.gif')?$master['currentskin'].'nvidia.gif':'img/rigs/nvidia.gif'); ?>" width="28" height="16" border="1" alt="nvidia">
+                                {% spacer 4 %}
+                            {% endif %}
+                            ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <font color="{{ skin.colors.blended_text }}" size="1">processor</font>
+                        </td>
+                        <td>
+                            {{ row.comp_proc }}   {{ row.comp_proc_type }}{% if row.comp_proc_spd %} at {{ row.comp_proc_spd }} MHz{% endif %}
+                            <br />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <font color="{{ skin.colors.blended_text }}" size="1">memory</font>
+                        </td>
+                        <td>
+                            {% if row.comp_mem %}{{ row.comp_mem }} MB{% endif %}{{ row.comp_mem_type }}
+                            <br />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <font color="{{ skin.colors.blended_text }}" size="1">storage</font>
+                        </td>
+                        <td>
+                            {% if row.comp_hdstorage %}{{ row.comp_hdstorage }} GB{% endif %}
+                            <br />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <font color="{{ skin.colors.blended_text }}" size="1">graphics</font>
+                        </td>
+                        <td>
+                            {{ row.comp_gfx_gpu }} - {{ row.comp_gfx_type }}
+                            <br />
+                        </td>
+                    </tr>
+                {% endif %}
+
+                {% if flags.caffeine %}
+                    <?php
+                    $counter = 0;
+                    $users = $dbc->database_query("SELECT * FROM users WHERE caffeine_mg!=0 ORDER BY caffeine_mg DESC");
+                    while($urow = $dbc->database_fetch_assoc($users)) {
+                        $counter++;
+                        if($urow['userid']==$_GET['id']) {
+                            break;
+                        }
+                    }
+                    $num_users = $dbc->database_num_rows($users);
+                    ?>
+                    <tr>
+                        <td colspan="2">
+                            <br />
+                            <b>caffeine</b>
+                            &nbsp;&nbsp;
+                            <font size="1">
+                                {% if user.is_authenticated %}
+                                    [ <a href="caffeine.php?action=add"><b>add</b></a> ]
+                                {% endif %}
+                                &nbsp;&nbsp;
+                                [ <a href="caffeine.php"><b>show all</b></a> ]
+                                <br />
+                            </font>
+                            <br />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <font color="{{ skin.colors.blended_text }}" size="1">
+                                current milligram count:
+                            </font>
+                        </td>
+                        <td>
+                            {{ user.caffeine_mg }} mg
+                            {% if user.caffeine_mg > 0 %}
+                                &nbsp;&nbsp;
+                                <font class="sm">
+                                    [rank {{counter}} / {{num_users}}]
+                                </font>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endif %}
+
+                {% if flags.benchmarks %}
+                    <tr>
+                        <td colspan="2">
+                            <br />
+                                <b>benchmarks</b>
+                                &nbsp;&nbsp;
+                                <font size="1">
+                                    {% if user.is_authenticated %}
+                                        [ <a href="chng_benchmarks.php"><b>modify own</b></a> ]
+                                    {% endif %}
+                                    &nbsp;&nbsp;
+                                    [ <a href="benchmarks.php"><b>show all</b></a> ]
+                                    <br />
+                                </font>
+                                <br />
+                        </td>
+                    </tr>
+
+                    <?php
+                    $query = $dbc->database_query("SELECT * FROM benchmarks");
+                    while($benchmark = $dbc->database_fetch_assoc($query)) {
+                        $value = $dbc->database_fetch_assoc($dbc->database_query("SELECT * FROM users_benchmarks WHERE userid='".$_GET["id"]."' AND benchid='".$benchmark["id"]."'"));
+
+                        $counter = 0;
+                        $users = $dbc->database_query("SELECT * FROM users_benchmarks WHERE benchid='".$benchmark['id']."' AND value!=0 ORDER BY value DESC");
+                        while($urow = $dbc->database_fetch_assoc($users)) {
+                            $counter++;
+                            if($urow['userid']==$_GET['id']) {
+                                break;
+                            }
+                        }
+                        $num_users = $dbc->database_num_rows($users); ?>
+                        <tr>
+                            <td><font color="{{ skin.colors.blended_text }}" size="1">{{ benchmark.name.lower }}:</font> </td>
+                            <td><?php  echo ($value["value"]==ceil($value["value"])?round($value["value"]):$value["value"]); ?>
+                                    {% if value.value %}
+                                        &nbsp;&nbsp;<span class="sm">[rank {{counter}}/{{num_users}}]</span>
+                                    {% endif %}
+                            </td>
+                        </tr>
+                    }
+                {% endif %}
+            </table>
+            <br />
+        {% enditem %}
+        <br />
+        <div align="right">[<font style="font-size: 11px"><b><a href="users.php">back to all users</a></b></font>]</div>
+    {% else %}
+        the user you are trying to find no longer exists.
+        <br />
+        <br />
+    {% endif %}
+{% display_bottom %}
+{% endblock %}

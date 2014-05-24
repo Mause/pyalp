@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% load trans %}
+{% load spacer %}
+
+<!-- $x = new universal(get_lang('singular'),get_lang('log in'),0); -->
+
+<strong>log in</strong>:<br />
+<br />
+<table border="0" cellpadding="2" cellspacing="2" width="400" class="centerd">
+    <tr>
+        <td>
+            <form action="/accounts/login" method="post" name="loginm">
+                {% csrf_token %}
+
+                {{login_form.as_p}}
+
+                <font size="1">&nbsp;{% trans 'username' %}<br /></font>
+                <input type="text" name="username" maxlength="40" style="width: 99%" /><br />
+
+                <font size="1">&nbsp;{% trans 'password' %} <br /></font>
+                <input type="password" name="passwd" maxlength="34" style="width: 99%" /><br />
+
+                <font size="1">&nbsp;<a href="register.php">{% trans "cp_register" %}</a></font><br />
+                <font size="1">&nbsp;<a href="passwd.php">{% trans 'forgot' %}</a></font><br />
+                <font size="1" color="{{ skin.colors.blended_text }}"> {% trans 'cp_security' %}<br /></font>
+
+                {% spacer 1 4 %}<br />
+                <div align="right">
+                    <input type="submit" value="{% trans 'log in'  %}" class="button" onClick="doLogin(); return true;"/>
+                </div>
+            </form>
+        </td>
+    </tr>
+</table>
+<font size="1">{% trans 'login.security_long' %}</font>
+<br />
+
+{% endblock %}
