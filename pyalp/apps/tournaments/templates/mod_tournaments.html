@@ -1,0 +1,67 @@
+{% load trans get_arrow truncatesmart %}
+
+<span class="sm">
+    {% for row in data %}
+        {% if row.marathon %}
+            {% with 'on' as state %}
+                {% get_arrow state %}
+            {% endwith %}
+        {% else %}
+            {% with 'off' as state %}
+                {% get_arrow state %}
+            {% endwith %}
+        {% endif %}
+
+        &nbsp;
+        <a href="{% url 'disp-tournament' row.id %}" class="menu">
+            {% if row.lockstart %}
+                <font color="{{ skin.colors.primary }}">
+            {% endif %}
+
+            <strong>
+                {{row.name | truncatesmart:24 }}
+            </strong>
+
+            {% if row.lockstart %}
+                </font>
+            {% endif %}
+        </a>
+        <!-- //echo ($row['marathon'] && $toggle['marath']?'<font color="'.$colors['primary'].'" size="1"><strong>*</strong></font>':''); -->
+        <br />
+    {% endfor %}
+
+    <br />
+    {% if flags.benchmarks %}
+        {% get_arrow %}
+        &nbsp;
+        <a href="benchmarks.php" class="menu">
+            <strong>
+                {% trans "bench_link" %}
+            </strong>
+        </a>
+        <br />
+    {% endif %}
+
+    {% if flags.caffeine %}
+        <?php get_arrow(); ?>
+        &nbsp;
+        <a href="caffeine.php" class="menu">
+            <strong>
+                {% trans "caffeine_log" %}
+            </strong>
+        </a>
+        <br />
+    {% endif %}
+
+    {% if flags.marath %}
+        {% get_arrow %}&nbsp;
+        <a href="themarathon.php" class="menu">
+            <strong>
+                {% trans "marathon" %}
+            </strong>
+        </a>
+        {% if marathonleader %}: {{marathonleader.username}}
+        {% else %}&nbsp;{% endif %}
+        <br />
+    {% endif %}
+</span>
