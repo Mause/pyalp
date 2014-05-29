@@ -1,0 +1,21 @@
+{% load get_arrow %}
+
+<span class="sm">&nbsp;please select a tournament:<br /></span>
+{% if data %}
+    {% for row in data %}
+        &nbsp;&nbsp;&nbsp;{% get_arrow %}&nbsp;<a href="{% url 'disp-tournament' row.id %}">{{ row.name }}</a><br />
+    {% endfor %}
+{% else %}
+    &nbsp;&nbsp;&nbsp;there are no&nbsp;
+    {% if started != '' %}
+        {% if started == 0 %}
+            unstarted
+        {% else %}
+            {% if started == 1 %}
+                started
+            {% endif %}
+        {% endif %}
+    {% endif %}
+    &nbsp;tournaments to list.  do you wish to <a href="{% 'admin:tournaments_tournament_add' %}">add a tournament</a>?
+{% endif %}
+<br />
