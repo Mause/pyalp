@@ -1,0 +1,12 @@
+{% if not row.assigned_to and not row.fixed %}
+    <!-- Unassigned and unfixed. -->
+    Unassigned.
+{% elif row.assigned_to and not row.fixed %}
+    <!-- Assigned and unfixed -->
+    Assigned.
+    [{{ row.assigned_to.username }}]
+{% elif row.assigned_to and row.fixed %}
+    <!-- assigned and fixed. -->
+    <a href="techsupport_details.php?sid={{ row.itemid }}" title="View result of tech support">Fixed.</a>
+    [{{ row.assigned_to.username }}]
+{% endif %}

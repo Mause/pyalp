@@ -1,0 +1,95 @@
+{% load display severity_colour severity_name %}
+{% load item_block markdown hours_ago %}
+
+{% display_top %}
+<!-- Before using, you should add some stuff to you 'techsupport' table. Refer to 'techsupport.php' for more info. -->
+
+
+<!--
+require_once 'include/_universal.php';
+require_once 'include/cl_validation.php';
+$x = new universal('tech support','',0);
+$x->add_related_link('assign/solve/edit jobs','admin_techsupport.php',2);
+-->
+
+<strong>technical support</strong>: details<br /><br />
+<!-- $x->display_related_links(); -->
+<!-- $colours = array('009999','3333cc','009900','66cc00','99cc00','ffff00','ffcc00','ff6600','ff0000','990000'); -->
+{% begitem 'tech support details' %}
+
+{% if techsupport_request %}
+    additional details for tech support entry.
+    <br /><br />
+    <table border="0" cellpadding="3" cellspacing="0" width="100%">
+        <tr>
+            <td width="25%"><b>field</b></td>
+            <td><b>info</b></td>
+        </tr>
+        <tr>
+            <td><b>entry no</b></td>
+            <td>{{ techsupport_request.id }}</td>
+        </tr>
+        <tr>
+            <td><b>username</b></td>
+            <td>{{ techsupport_request.user.username }}</td>
+        </tr>
+        <tr>
+            <td><b>time</b></td>
+            <td>{% hours_ago techsupport_request.itemtime %}</td>
+        </tr>
+        <tr>
+            <td><b>severity</b></td>
+            <td>
+                <table width="0%">
+                    <tr>
+                        <td bgcolor="#{% severity_colour techsupport_request.severity %}">
+                            <font color="#000000">
+                                &nbsp;
+                                <b>
+                                {% severity_name techsupport_request.severity %}
+                                </b>
+                                &nbsp;
+                            </font>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td><b>complete information given by {{ techsupport_request.user.username }}</b></td>
+            <td>{{ techsupport_request.info | markdown | safe }}</td>
+        </tr>
+        <tr>
+            <td><b>status</b></td>
+            <td>
+                {% include 'severity_status.html' %}
+            </td>
+        </tr>
+        {% if techsupport_request.result %}
+            <tr>
+                <td><b>result of tech support</b></td>
+                <td>{{ techsupport_request.result | markdown | safe }}</td>
+            </tr>
+        {% endif %}
+    </table>
+{% else %}
+    invalid sid provided!
+{% endif %}
+
+<br /><br />
+{% enditem %}
+
+{% if user.id == techsupport_request.assigned_to.id or current_security_level >= 2 %}
+    {% if techsupport_request.fixed %}
+        <b>
+            <a href="techsupport_solve.php?jid={{ techsupport_request.id }}">
+                solve this problem
+            </a>
+        </b>
+    {% endif %}
+{% endif %}
+
+<br /><br />
+<a href="/techsupport.php">back</a>
+<br /><br />
+{% display_bottom %}

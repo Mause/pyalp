@@ -1,0 +1,62 @@
+<!-- require_once 'include/_universal.php';
+$x = new universal('tech support','',0);
+$x->add_related_link('assign/solve/edit jobs','admin_techsupport.php',2);
+ -->
+{% display_top %}
+<strong>technical support</strong>: <br /><br />
+<!-- $x->display_related_links(); -->
+
+if (empty($_POST)) {
+    {% include "techsupport_get.html" %}
+} else {
+    require_once 'include/cl_validation.php';
+    $valid = new validate();
+
+    if ($valid->get_value('type') == 'add') {
+        $valid->is_empty('severity','you need to input the severity of your request.');
+        $valid->is_empty('info', 'you need to provide additional info to assist us helping you.');
+        if(!$valid->is_error()) {
+            if (!$dbc->database_num_rows($dbc->database_query("SELECT * FROM techsupport WHERE userid='".$_COOKIE['userid']."' AND fixed='0'"))) {
+                if($dbc->database_query("INSERT INTO techsupport (userid,itemtime,severity,info,fixed) VALUES ('".$_COOKIE['userid']."','".date('Y-m-d H:i:s')."','".$valid->get_value('severity')."','".$valid->get_value('info')."', '0')")) {
+                    echo 'tech support request successfully added.<br /><br /> &gt; <a href="techsupport.php">view tech support requests</a>.<br /><br />';
+                } else {
+                    echo 'there has been an error adding your tech support request.  it has _not_ been added.<br /><br />';
+                }
+            } else {
+                echo 'you already have a tech support request in the database!  fix your current problem first.<br /><br />';
+            }
+        }else{
+            $valid->display_errors();
+        }
+    } elseif ($valid->get_value('type') == 'delete') {
+        if ($dbc->database_num_rows($dbc->database_query("SELECT * FROM techsupport WHERE itemid='".$valid->get_value("itemid")."' AND userid='".$_COOKIE['userid']."'"))||current_security_level()>=2) {
+            if ($dbc->database_query("DELETE FROM techsupport WHERE itemid='".$valid->get_value('itemid')."'")) {
+                echo 'your tech support request was successfully deleted.<br /><br /> &gt; <a href="techsupport.php">view tech support requests</a>.<br /><br />';
+            } else {
+                echo 'there was an error and your tech support request was _not_ deleted.';
+            }
+        } else {
+            echo 'you are not authorized to delete someone else\'s tech support request.';
+        }
+    } elseif ($valid->get_value("type")=="modify") {
+        $valid->is_empty('fixer','you need to specify the fixer.');
+        $valid->is_empty('result', 'you need to specify the solution.');
+        if(!$valid->is_error()) {
+            if ($dbc->database_query("UPDATE techsupport set fixed=1, fixer='".$valid->get_value('fixer')."', result='".$valid->get_value('result')."', assigned_to='".intval($valid->get_value('fixer'))."' WHERE itemid='".$valid->get_value('itemid')."' AND userid='".$_COOKIE['userid']."'")) {
+                echo 'your tech support request was successfully fulfilled.<br /><br /> &gt; <a href="techsupport.php">view tech support requests</a>.<br /><br />';
+            } else {
+                echo 'there was an error and your tech support request was _not_ updated.';
+            }
+        }else{
+            $valid->display_errors();
+        }
+
+    }elseif ($valid->get_value('type') == 'assign'){
+        if ($dbc->database_query("UPDATE techsupport set `assigned_to`='".$valid->get_value('assign_to')."' WHERE `itemid`=".$valid->get_value('job')))  {
+            echo 'assigned to job.<br /><br /> &gt; <a href="techsupport.php">back</a>.<br /><br />';
+        } else {
+            echo 'there was an error and your job assignment was _not_ addded.';
+        }
+    }
+}
+{% display_bottom %}

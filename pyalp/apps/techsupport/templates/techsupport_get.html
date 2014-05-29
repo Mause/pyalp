@@ -1,0 +1,223 @@
+{% load severity_colour severity_name display %}
+{% load item_block spacer markdown staticfiles hours_ago %}
+
+{% display_top %} {# remove this once main page is ported #}
+
+{% if queue %}
+    {% begitem 'tech support queue' %}
+    this list is intended to be a queue for anyone's technical troubles. if you're having any technical problems, post it here. you are allowed to have only one request at a time; and our admins should be assigned the job shortly after that.<br />
+
+    <table border="0" cellpadding="3" cellspacing="0" width="100%">
+        <tr>
+            <td>{% spacer 1 28 %}</td>
+            <td><b>username</b><br />{% spacer 0 1 %}</td>
+            <td><b>details</b><br />{% spacer 0 1 %}</td>
+            <td><b>time</b><br />{% spacer 100 %}</td>
+            <td><div align="center"><b>severity</b></div></td>
+            <td width="100%"><b>problem</b></td>
+            <td><b>status</b></td>
+            <td>&nbsp;</td>
+        </tr>
+
+        {% for row in queue %}
+            <tr bgcolor="{% cycle skin.colors.cell_alternate '' %}">
+                <td>{% spacer 1 28 %}</td>
+                <td>
+                    #{{ row.id }}
+                    <a
+                        href="/disp_users.php?id={{ row.user.id }}"
+                        {% if not row.fixed %}
+                            style="color: #{% severity_colour row.severity %}">
+                            <b>
+                        {% else %}
+                            >
+                        {% endif %}
+                            {{ row.user.username }}
+                        {% if not row.fixed %}</b>{% endif %}
+                    </a>
+                </td>
+                <td>
+                    <a href="{% url 'techsupport-details' row.id %}">
+                        <img src="{% static 'img/goto.gif' %}" border="0" alt="view details">
+                    </a>
+                </td>
+                <td>{% hours_ago row.itemtime %}</td>
+                <td bgcolor="#{% severity_colour row.severity %}">
+                    <div align="center">
+                        <font color="#000000">
+                            &nbsp;
+                            <b>
+                                {% severity_name row.severity %}
+                            </b>
+                            &nbsp;
+                        </font>
+                    </div>
+                </td>
+                <td>{{ row.info | markdown | safe }}</td>
+                <td>
+                    {% include 'severity_status.html' %}
+                </td>
+
+                <td>
+                    {% if row.user.id == user.id or current_security_level >= 2 or row.assigned_to.id == user.id %}
+                        <form action="<?php echo get_script_name(); ?>" method="POST">
+                            {% if not row.fixed %}
+                                <input type="hidden" name="type" value="delete" />
+                                <input type="hidden" name="itemid" value="{{ row.itemid }}" />
+                                <input type="submit" name="submit" value="cancel!" style="width: 50px; font: 10px Verdana;" class="formcolors" />
+                            {% elif row.fixed and current_security_level >= 2 %}
+                                <input type="hidden" name="type" value="delete" />
+                                <input type="hidden" name="itemid" value="{{ row.itemid }}" />
+                                <input type="submit" name="submit" value="delete!" style="width: 50px; font: 10px Verdana;" class="formcolors" />
+                            {% endif %}
+                        </form>
+                    {% endif %}
+                </td>
+            </tr>
+    {% endfor %}
+    </table>
+    <br />
+    {% enditem 'tech support queue' %}
+{% elif current_security_level == 0 %}
+    {% begitem 'tech support queue' %}
+    there are no items currently in the queue.<br />
+    <br />
+    {% enditem 'tech support queue' %}
+{% endif %}
+
+{% if current_security_level >= 1 and created_by_user_unfixed %}
+    {% with created_by_user_unfixed.0 as fixtrow %}
+        <br />
+        {% begitem 'problem solved' %}
+        <b>is your problem solved?</b>
+        <br />
+        <br />
+        <form action="techsupport.php" method="POST">
+            <table border="0" cellpadding="3" cellspacing="0" width="100%">
+                <tr>
+                    <td width="25%"></td>
+                    <td></td>
+                <tr>
+                <tr>
+                    <td>&nbsp;<b>problem title:</b></td>
+                    <td>{{ fixtrow.info }}</td>
+                </tr>
+                <tr>
+                    <td>&nbsp;<b>problem solved by: </b></td>
+                    <td>
+                        <select name="fixer" style="width: 200px;">
+                            {% if fixtrow.assigned_to %}
+                                <option value="{{ fixtrow.assigned_to.id }}">
+                                    {{ fixtrow.assigned_to.username }}
+                                </option>
+                            {% else %}
+                                <option value=""></option>
+                            {% endif %}
+
+                            {% if fixtrow.assigned_to %}
+                                $temp = $dbc->database_query('SELECT userid, username FROM users WHERE `userid`!='.$fixtrow['assigned_to']);
+                            {% else %}
+                                $temp = $dbc->database_query('SELECT userid, username FROM users');
+                            {% endif %}
+
+                            {% for temprow in temp %}
+                                <option value="{{ temprow.id }}">{{ temprow.username }}</option>
+                            {% endfor %}
+                       </select>
+                   </td>
+                </tr>
+                <tr>
+                    <td>&nbsp;<b>result/solution to problem</b></td>
+                    <td><textarea name="result"></textarea></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><input type="submit" name="submit" value="fixed!" class="formcolors" /></td>
+                </tr>
+            </table>
+
+            <input type="hidden" name="type" value="modify" />
+            <input type="hidden" name="itemid" value="<?php echo $fixtrow['itemid']; ?>" />
+        </form>
+        <br />
+        {% enditem %}
+    {% endwith %}
+{% endif %}
+
+{% if not created_by_user_unfixed and current_security_level >= 1 %}
+    {% begitem 'add tech support request' %}
+    <table border="0" cellpadding="4" cellspacing="4" width="99%">
+        <tr>
+            <td>
+                <form action="techsupport.php" method="POST">
+                    <input type="hidden" name="type" value="add">
+                    <font size="1">
+                        <b>severity of problem</b>
+                         (1 is least severe and 5 is most severe)
+                        <br />
+                    </font>
+                    <table border=0 width=100% cellpadding=3 cellspacing=0>
+                        <tr style="color: #000000">
+                            <td>
+                                <select name="severity">
+                                    <option value="1">1 [annoying]</option>
+                                    <option value="2">2 [minor]</option>
+                                    <option value="3">3 [important]</option>
+                                    <option value="4">4 [major]</option>
+                                    <option value="5">5 [critical]</option>
+                                </select>
+                                <!--
+                                <input type="radio" name="severity" class="radio" value=""> <b></b>-->
+                            </td>
+                        </tr>
+                    </table>
+                    <br />
+                    <font size="1">
+                        <b>details about your problem</b>
+                         (try to include your OS, what you are doing, and anything else you think is related)
+                        <br />
+                    </font>
+                    <table border="0" width="100%" cellpadding="3" cellspacing="0">
+                        <tr style="color: #000000">
+                            <td>
+                                <textarea name="info" rows="4" cols="40"></textarea>
+                            </td>
+                        </tr>
+                    </table>
+                    <br />
+                    <div align="right">
+                        <input type="submit" name="submit" value="help!" style="width: 160px" class="formcolors" />
+                    </div>
+                </form>
+            </td>
+        </tr>
+    </table>
+    {% enditem %}
+{% endif %}
+
+<!-- current user -->
+{% if assigned_to_current_user %}
+    {% begitem 'your jobs' %}
+        <b>unfixed jobs</b><br />
+        {% for row in assigned_to_current_user_not_fixed %}
+            #{{ row.id }} - <a href="/disp_users.php?id={{ row.user.id }}">{{ row.assigned_to.username }}</a>
+            <span style="color:#{% severity_colour row.severity %};">
+                {% severity_name row.severity %}
+            </span>
+            <a href="{% url 'techsupport-details' row.id %}">[details]</a><br />
+        {% endfor %}
+
+        <b>fixed jobs</b><br />
+        {% for row in assigned_to_current_user_fixed %}
+            #{{ row.id }} - <a href="/disp_users.php?id={{ row.user.id }}">{{ row.assigned_to.username }}</a>
+            &nbsp;
+            <span style="color:#{% severity_colour row.severity %};">
+                {% severity_name row.severity %}
+            </span>&nbsp;
+            <a href="{% url 'techsupport-details' row.id %}">[details]</a>
+            <br />
+        {% endfor %}
+    {% enditem %}
+{% endif %}
+
+{% display_bottom %} {# remove this once main page is ported #}
