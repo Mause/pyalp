@@ -4,6 +4,7 @@ from django.template.loader import render_to_string
 from modules.module_utils import ModuleLibrary
 register = ModuleLibrary()
 
+
 @register.module
 class ModTournaments(object):
     module_name = 'mod_tournaments'
@@ -13,13 +14,6 @@ class ModTournaments(object):
 
     def render(self, context):
         # global $dbc, $colors, $master, $toggle, $userinfo, $images;
-        flags = context['flags']
-        skin = context['skin']
-
-        # SELECT tourneyid, name, marathon, lockstart
-        # FROM tournaments
-        # WHERE tentative=0
-        # ORDER BY name
 
         data = Tournament.objects.filter(tentative=False).order_by('name')
 

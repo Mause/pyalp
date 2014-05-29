@@ -26,7 +26,11 @@
                 </font>
             {% endif %}
         </a>
-        <!-- //echo ($row['marathon'] && $toggle['marath']?'<font color="'.$colors['primary'].'" size="1"><strong>*</strong></font>':''); -->
+        {% if row.marathon and flags.marath %}
+            <font color="{{ skin.colors.primary }}" size="1">
+                <strong>*</strong>
+            </font>
+        {% endif %}
         <br />
     {% endfor %}
 
@@ -43,7 +47,7 @@
     {% endif %}
 
     {% if flags.caffeine %}
-        <?php get_arrow(); ?>
+        {% get_arrow %}
         &nbsp;
         <a href="caffeine.php" class="menu">
             <strong>
