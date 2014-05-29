@@ -1,0 +1,54 @@
+{% load get_arrow %}
+
+{% get_arrow %}&nbsp;
+<a href="{% url 'disp-tournament' tourney.id %}" class="menu"><strong>information</strong></a>
+{% get_arrow %}&nbsp;
+<a href="{% url 'disp-team' tourney.id %}" class="menu">{{ txt }}</a>
+
+{% if extra_admin and current_security_level >= 2 and not tourney.lockstart %}
+    [ <a href="admin_teams.php?show={{ tourney.id }}" class="menu">add</a> | <a href="admin_teams_delete.php?show={{ tourney.id }}" class="menu">del</a> ]
+{% endif %}
+
+{% get_arrow %}&nbsp;
+{% if tourney.lockstart %}
+    <a href="{{ link }}" class="menu">
+{% else %}
+    <font style="color: {{ skin.colors.blended_text }}">
+{% endif %}
+standings
+{% if tourney.lockstart %}
+    </a>
+{% else %}
+    </font>
+{% endif %}
+
+{% if mapvote %}
+    {% get_arrow %}&nbsp;<a href="maps.php?id={{ tourney.id }}" class="menu">maps</a>
+{% endif %}
+
+<!--
+Disable admin_disp_tournaments for now
+if(tournament_is_secure($tourneyid) && !ALP_TOURNAMENT_MODE) { ?>
+    {% get_arrow %}&nbsp;
+    if ($tournament['lockstart']) {
+        <a href="admin_disp_tournament.php?id={{ tourney.id }}" class="menu">
+    } else {
+        <font style="color: <?php echo $colors['blended_text']; ?>">
+    }
+    admin
+    if($tournament['lockstart']) {
+        </a>
+    } else {
+        </font>
+    }
+}
+-->
+
+{% if extra_admin and current_security_level >= 2 and not tourney.lockstart %}
+    {% get_arrow %}&nbsp;<a href="{% url 'admin:tournaments_tournaments_seeding' tourney.id %}" class="menu">seeding</a>
+{% endif %}
+<br />
+
+{% if double_br %}
+    <br />
+{% endif %}
