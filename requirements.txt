@@ -5,7 +5,7 @@ django-vanilla-views==1.0.3
 django-jsonify==0.2.1
 
 # debugging
-pudb==2013.5.1
+pudb==2014.1
 django-debug-toolbar==1.2.1
 django-debug-toolbar-template-timings==0.6.1
 django-extensions==1.2.5
