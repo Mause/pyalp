@@ -3,6 +3,8 @@ Django==1.6.5
 django-configurations==0.8
 django-vanilla-views==1.0.3
 django-jsonify==0.2.1
+bcrypt # always keep up to date
+django-mathfilters==0.2.1
 
 # debugging
 pudb==2014.1
@@ -33,6 +35,7 @@ python3-memcached==1.51
 # form stuff
 django-floppyforms==1.1.1
 git+https://github.com/jakewins/django-money@8aeca9ea10a27ec1784d5faaba3e4c93a0c597c1#egg=django-money
+django-crispy-forms==1.4.0
 
 # model stuff
 model-mommy==1.2
@@ -42,3 +45,6 @@ South==0.8.4
 
 # for admindocs
 docutils==0.11
+
+# display stuff
+markdown2==2.2.1
