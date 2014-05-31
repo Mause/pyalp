@@ -2,6 +2,8 @@
 from django.core.urlresolvers import resolve
 
 from cl_module.cl_module import ModuleManager
+from flags.registry import get_flag_registry
+from pyalp.skin import get_skin
 
 
 def app_name(request):
@@ -13,7 +15,6 @@ def url_name(request):
 
 
 def skin(request):
-    from pyalp.skin import get_skin
     return {'skin': get_skin()}
 
 
@@ -28,7 +29,6 @@ def lan(request):
     return {'lan': lan}
 
 
-from flags.registry import get_flag_registry
 
 
 def flags(request):
