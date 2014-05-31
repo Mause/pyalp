@@ -41,6 +41,10 @@ def lan(request):
     return {'lan': lan}
 
 
+def current_security_level(request):
+    from pyalp.security import current_security_level as csl
+
+    return {'current_security_level': csl(request.user)}
 
 
 def flags(request):
