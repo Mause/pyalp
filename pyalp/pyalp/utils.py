@@ -14,11 +14,10 @@ def render_to_response(*args, **kwargs):
     a the request context is passed through
     """
 
-    context_instance = kwargs.get('context_instance', None)
-    if context_instance:
-        kwargs['context_instance'] = RequestContext(
-            context_instance
-        )
+    assert 'context_instance' in kwargs, 'a context_instance is required!'
+    kwargs['context_instance'] = RequestContext(
+        kwargs['context_instance']
+    )
 
     return _rtr(*args, **kwargs)
 
