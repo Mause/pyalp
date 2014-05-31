@@ -1,0 +1,35 @@
+{
+    // text(1,1,0,get_lang('desc_name'),array('empty' => get_lang('error_name')),100);
+    "name": "redflag lanfest",
+
+    // text(1,1,0,get_lang('desc_org'),array('empty' => get_lang('error_org')),100);
+    "org": "",
+
+    // text(1,1,0,get_lang('desc_location'),array('empty' => get_lang('error_location')),50);
+    "location": "Perth",
+
+    // TODO : populate country selectlist with more options
+    // select(1,1,0,get_lang('desc_country'),array('empty' => get_lang('error_country')),array("us"=>"us","outside us"=>"outside us"));
+    "country": "Australia",
+
+    // text(1,1,0,get_lang('desc_max'),array('empty' => get_lang('error_max')),5);
+    "max": "",
+
+    // datetime(0,1,1,get_lang('desc_datetimestart'),array(),array(date('U')));
+    "datetimestart": "",
+
+    // datetime(0,1,1,get_lang('desc_datetimeend'),array(),array(date('U')));
+    "datetimeend": "",
+
+    // text(1,1,0,get_lang('desc_email'),array('empty' => get_lang('error_email')),40);
+    "email": "",
+
+    // text(1,1,0,get_lang('desc_websiteurl'),array('empty' => get_lang('error_websiteurl')),40);
+    "websiteurl": "",
+
+    // select(1,1,0,get_lang('desc_alp_tournament_mode'),array(),array(1=>get_lang('yes'),0=>get_lang('no')));
+    "alp_tournament_mode": false,
+
+    // select(1,1,0,get_lang('desc_alp_tournament_mode_computer_games'),array(),array(1=>get_lang('mode_games'),0=>get_lang('mode_sports')));
+    "alp_tournament_mode_computer_games": false
+}
