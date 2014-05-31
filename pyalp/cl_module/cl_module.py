@@ -20,7 +20,7 @@ class Module(object):
 
         self.skin = get_skin()
 
-    # display module got re-implemented as template tag
+    # display_module got re-implemented as template tag
 
     def get_inner_width(self):
         if self.loc != 'main':
@@ -106,16 +106,16 @@ class ModuleManager(object):
     def get_width(self, side=None):
         if self.rightModules:
             right = (
-                self.skin.container['rightmodule'] + 2 *
-                self.skin.container['horizontalpadding']
+                self.skin.container['rightmodule'] +
+                2 * self.skin.container['horizontalpadding']
             )
         else:
             right = self.skin.container['horizontalpadding']
 
         if self.leftModules:
             left = (
-                self.skin.container['leftmodule'] + 2 *
-                self.skin.container['horizontalpadding']
+                self.skin.container['leftmodule'] +
+                2 * self.skin.container['horizontalpadding']
             )
         else:
             left = self.skin.container['horizontalpadding']
