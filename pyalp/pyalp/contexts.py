@@ -1,5 +1,9 @@
 #main/contexts.py
+from os.path import join
+import json
+
 from django.core.urlresolvers import resolve
+from django.conf import settings
 
 from cl_module.cl_module import ModuleManager
 from flags.registry import get_flag_registry
@@ -24,7 +28,15 @@ def modules(request):
 
 def lan(request):
     # TODO: have this load info from the db instead
-    lan = {'name': 'RFLAN'}
+    path = join(settings.PROJECT_ROOT, 'pyalp', 'config.json')
+    with open(path) as fh:
+        contents = fh.readlines()
+
+    lan = json.loads('\n'.join(
+        line
+        for line in map(str.lstrip, contents)
+        if not line.startswith('//')
+    ))
 
     return {'lan': lan}
 
