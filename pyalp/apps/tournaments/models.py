@@ -539,7 +539,3 @@ class Server(models.Model):
             self.ipaddress,
             self.queryport
         )
-
-
-class Moderator(models.Model):
-    pass
