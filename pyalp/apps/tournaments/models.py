@@ -50,7 +50,11 @@ class Match(models.Model):
     # id_lose_top BOOL DEFAULT '0',
 
     def __str__(self):
-        return 'match for {}'.format(self.tourney.name)
+        return 'match for {} in round {} in match {}'.format(
+            self.tourney.name,
+            self.rnd,
+            self.mtc
+        )
 
 
 class MatchesScoreVote(models.Model):
@@ -320,7 +324,7 @@ class Team(models.Model):
     ladder_ranking = models.IntegerField(default=0)
 
     def __str__(self):
-        return self.name
+        return 'team {}'.format(self.name)
 
 
 class Player(models.Model):
