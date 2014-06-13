@@ -104,7 +104,7 @@ class MatchesTeam(models.Model):
     top = models.BooleanField()
 
     # score int(20) DEFAULT NULL,
-    score = models.IntegerField()
+    score = models.IntegerField(default=None)
 
 
 class Tournament(models.Model):
@@ -177,24 +177,29 @@ class Tournament(models.Model):
     )
 
     # ffa BOOL DEFAULT '0',
-    ffa = models.BooleanField(help_text='free for all? (guess)')
+    ffa = models.BooleanField(help_text='free for all? (guess)', default=False)
 
     # marathon BOOL DEFAULT '0',
     marathon = models.BooleanField(
-        help_text='part of the global marathon tournament?'
+        help_text='part of the global marathon tournament?',
+        default=False
     )
 
     # lockteams BOOL DEFAULT '0',
-    lockteams = models.BooleanField(help_text='lock team creation?')
+    lockteams = models.BooleanField(
+        help_text='lock team creation?', default=False
+    )
 
     # lockjoin BOOL DEFAULT '0',
-    lockjoin = models.BooleanField(help_text='lock team joining and quitting?')
+    lockjoin = models.BooleanField(
+        help_text='lock team joining and quitting?', default=False
+    )
 
     # lockstart BOOL DEFAULT '0',
-    lockstart = models.BooleanField(db_index=True)
+    lockstart = models.BooleanField(db_index=True, default=False)
 
     # lockfinish BOOL DEFAULT '0',
-    lockfinish = models.BooleanField()
+    lockfinish = models.BooleanField(default=False)
 
     # teamcolors BIGINT DEFAULT '0',
     teamcolors = models.ForeignKey('TeamType', null=True)
@@ -212,17 +217,20 @@ class Tournament(models.Model):
         help_text=(
             'for double elimination tournaments -- if the winner of the '
             'winners bracket has to lose twice to lose the tournament.'
-        )
+        ),
+        default=False
     )
 
     # switchover int(4) DEFAULT '0',
     switchover = models.IntegerField(
-        help_text="the round number for combination tournaments to switch."
+        help_text="the round number for combination tournaments to switch.",
+        default=False
     )
 
     # rrsplit int(4) DEFAULT '0',
     rrsplit = models.IntegerField(
-        help_text="how many teams are in each split of the round robin."
+        help_text="how many teams are in each split of the round robin.",
+        default=0
     )
 
     # timelimit datetime NULL,
@@ -240,7 +248,10 @@ class Tournament(models.Model):
     settings = models.BinaryField()
 
     # tentative BOOL DEFAULT '0',
-    tentative = models.BooleanField(help_text='classify as tentative?')
+    tentative = models.BooleanField(
+        help_text='classify as tentative?',
+        default=False
+    )
 
     def __str__(self):
         return '{} playing {}'.format(self.name, self.game.name)
