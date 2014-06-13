@@ -103,7 +103,7 @@ def query_server_from_instance(serv, get_players=False, get_rules=False):
         serv,
         serv.address,
         serv.queryport,
-        serv.game.querystr2,
+        serv.game.engine_type,
         get_players,
         get_rules
     )
