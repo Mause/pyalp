@@ -450,6 +450,37 @@ class Game(models.Model):
         return msg
 
 
+class GameRequest(models.Model):
+    """
+    "game_requests" => "id BIGINT NOT NULL auto_increment,
+        userid BIGINT NOT NULL,
+        gameid BIGINT DEFAULT '0',
+        gamename varchar(255) NULL,
+        itemtime DATETIME NOT NULL,
+        ipaddress varchar(255) NULL,
+        queryport varchar(10) NULL,
+        PRIMARY KEY (id)",
+    """
+
+    # userid BIGINT NOT NULL,
+    user = models.ForeignKey(settings.AUTH_USER_MODEL)
+
+    # gameid BIGINT DEFAULT '0',
+    game = models.ForeignKey('Game')
+
+    # gamename varchar(255) NULL,
+    gamename = models.CharField(max_length=255)
+
+    # itemtime DATETIME NOT NULL,
+    itemtime = models.DateTimeField()
+
+    # ipaddress varchar(255) NULL,
+    ipaddress = models.CharField(max_length=255)
+
+    # queryport varchar(10) NULL,
+    queryport = models.CharField(max_length=10)
+
+
 class PollMap(models.Model):
     """
     "poll_maps" => "id BIGINT NOT NULL AUTO_INCREMENT,
