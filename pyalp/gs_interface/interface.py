@@ -60,11 +60,16 @@ def _query_server(
     ))
 
     if interface.protocol_exists(protocol):
-        gameserver = GameServerInterface(protocol, address, port)
+        return interface.query_server(
+            protocol,
+            address,
+            port,
+            get_players,
+            get_rules
+        )
+
     else:
         raise NonExistantProtocol(protocol)
-
-    return gameserver.query_server(get_players, get_rules)
 
 
 def queryServer(address, port, protocol, get_players=False, get_rules=False):
@@ -111,23 +116,3 @@ def game_title(gamename):
         return game_names[gamename]
     except KeyError:
         return "Game Status"
-
-
-class GameServerInterface(object):
-    """
-    In this instance, by interface i mean it in the go & java fashion
-    """
-
-    def __init__(self, protocol, address, port):
-        self.protocol = protocol
-        self.address = address
-        self.port = port
-
-    def query_server(self, get_players, get_rules):
-        return interface.query_server(
-            self.protocol,
-            self.address,
-            self.port,
-            get_players,
-            get_rules
-        )
