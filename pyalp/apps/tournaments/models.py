@@ -443,7 +443,11 @@ class Game(models.Model):
     hlsw_supported = models.BooleanField()
 
     def __str__(self):
-        return '{} {}'.format(self.name, self.current_version)
+        msg = self.name
+        if self.current_version:
+            msg += ' ' + self.current_version
+
+        return msg
 
 
 class PollMap(models.Model):
