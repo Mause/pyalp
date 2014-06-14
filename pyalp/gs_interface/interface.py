@@ -22,6 +22,10 @@ class NonExistantProtocol(Exception):
     pass
 
 
+class CouldNotReachServer(Exception):
+    pass
+
+
 def calcqport(port, qgame):
     assert qgame, qgame
     if qgame not in game_ports:
@@ -87,10 +91,9 @@ def queryServer(address, port, protocol, get_players=False, get_rules=False):
         )
 
     if not result:
-        msg = 'No such server @ {}:{} with protocol {}'.format(
-            address, port, protocol
+        raise CouldNotReachServer(
+            '{}:{} with protocol {}'.format(address, port, protocol)
         )
-        raise Exception(msg)
 
     return _query_server(
         address, port, protocol,
