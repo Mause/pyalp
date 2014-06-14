@@ -26,7 +26,7 @@ class Module(models.Model):
     description = models.CharField(max_length=45)
 
     # `required` varchar(45) default NULL,
-    required = models.CharField(max_length=45)
+    required = models.CharField(max_length=45, null=True, blank=True)
 
     def __str__(self):
         return '{} {} at position {}'.format(
