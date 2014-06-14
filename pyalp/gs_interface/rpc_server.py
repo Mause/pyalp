@@ -16,7 +16,7 @@ from tinyrpc.protocols.jsonrpc import JSONRPCProtocol
 from tinyrpc.transports.zmq import ZmqServerTransport
 
 logging.basicConfig(level=logging.DEBUG)
-logging.getLogger('zmq.auth').setLevel(logging.DEBUG)
+logging.getLogger('zmq.auth').setLevel(logging.WARNING)
 
 HERE = dirname(__file__)
 
@@ -24,7 +24,7 @@ HERE = dirname(__file__)
 # standalong scripts need extra setup
 from configurations import importer
 os.environ.update({
-    'DJANGO_CONFIGURATION': 'Dev',
+    'DJANGO_CONFIGURATION': 'Dev',  # setting doesn't really matter
     'DJANGO_SETTINGS_MODULE': 'pyalp.settings'
 })
 importer.install(check_options=True)
@@ -85,6 +85,7 @@ def main():
 
     logging.info("RPC server will serve forever")
 
+    # enter an infinite loop
     rpc_server.serve_forever()
 
 

@@ -46,7 +46,8 @@ def calcqport(port, qgame):
 
 
 def _query_server(
-        serv, address, port, protocol, get_players=False, get_rules=False):
+        serv, address, port, protocol,
+        get_players=False, get_rules=False):
 
     qport = calcqport(port, serv.game.short)
     if qport is False:  # zero could be returned and eval'd as False

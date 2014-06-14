@@ -3,7 +3,7 @@
 
 from __future__ import absolute_import
 
-from init import init
+from __init__ import init
 init()
 
 from tinyrpc.server import RPCServer

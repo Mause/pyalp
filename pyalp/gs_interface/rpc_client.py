@@ -1,6 +1,7 @@
 # needed until we don't need to vendor tinyrpc anymore
 from . import init, KEYS_DIR
 init()
+
 from os.path import join
 
 import zmq
