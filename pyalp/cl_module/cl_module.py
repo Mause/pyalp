@@ -1,6 +1,7 @@
 from os.path import exists, join
 
 from pyalp.skin import get_skin
+from pyalp.security import current_security_level
 
 
 class Module(object):
@@ -62,7 +63,7 @@ class Module(object):
             return '96%'
 
     def is_module_secure(self):
-        return (self.current_security_level() >= self.get_security())
+        return current_security_level() >= self.get_security()
 
 
 class ModuleManager(object):
