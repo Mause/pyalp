@@ -84,16 +84,16 @@ class LoadModulesNode(GenericTemplateTag):
             #             "",
             #             modulelistitem[1]
             #         )
-            # elif key == "mod_tournaments" and not ALP_TOURNAMENT_MODE:
-            #     modules.add_module(
-            #         "tournaments",
-            #         modulelistitem[0],
-            #         0,
-            #         _("tournaments"),
-            #         0,
-            #         "tournaments.php",
-            #         modulelistitem[1]
-            #     )
+            elif key == "mod_tournaments" and not ALP_TOURNAMENT_MODE:
+                modules.add_module(
+                    "mod_tournaments",
+                    modulelistitem[0],
+                    0,
+                    _("tournaments"),
+                    0,
+                    "tournaments.php",
+                    modulelistitem[1]
+                )
             # elif key == "mod_polls" and not ALP_TOURNAMENT_MODE:
             #     polls = Poll.objects.count()
             #     if polls:
@@ -108,17 +108,17 @@ class LoadModulesNode(GenericTemplateTag):
             #             modulelistitem[1]
             #         )
 
-            # elif key == 'mod_news':
-            #     news = NewsItem.objects.filter(hide_item=False).count()
-            #     modules.add_module(
-            #         "news",
-            #         modulelistitem[0],
-            #         0,
-            #         _("announcements"),
-            #         0,
-            #         '',
-            #         modulelistitem[1]
-            #     )
+            elif key == 'mod_news':
+                news = NewsItem.objects.filter(hide_item=False).count()
+                modules.add_module(
+                    "news",
+                    modulelistitem[0],
+                    0,
+                    _("announcements"),
+                    0,
+                    '',
+                    modulelistitem[1]
+                )
 
         context['modules'] = modules
 
