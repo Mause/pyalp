@@ -31,6 +31,8 @@ def setup_client(end_point):
         join(KEYS_DIR, "server.key")
     )
 
+    # the connection must come after the certificates
+    # have been added to the socket
     socket.connect(end_point)
 
     client = RPCClient(

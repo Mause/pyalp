@@ -33,7 +33,8 @@ sys.path.insert(0, join(HERE, '..'))
 
 def setup_auth(ctx):
     """
-    Creates
+    Creates an Authenticator instance correctly configured
+    for "ironhouse" authentication.
 
     word of warning; if the return value from this function ever gets garbage
     collected, the authenticator will get shut down, and authentication will
