@@ -1,49 +1,46 @@
-{% extends "base.html" %}
-
 {% load index_modules module include_module %}
-{% load news %}
+{% load news display %}
 
-{% block content %}
+{% display_top False %}
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+        <tr>
+            {% if skin.container.index_modules == 'left' %}
+                <!-- left index modules -->
+                {% index_modules skin.container.index_modules %}
+            {% else %}
+                <!-- right ordinary modules -->
+            {% endif %}
 
-<table border="0" cellpadding="0" cellspacing="0" width="100%">
-    <tr>
-        {% if skin.container.index_modules == 'left' %}
-            <!-- left index modules -->
-            {% index_modules skin.container.index_modules %}
-        {% else %}
-            <!-- right ordinary modules -->
-        {% endif %}
-
-        <!-- middle -->
-        <td width="100%" valign="top">
-            <table border="0" cellpadding="0" cellspacing="0" width="100%">
-                <tr>
-                    <td>
-                        {% news all_news_items %}
-                    </td>
-                </tr>
-
-                <!-- modules follow -->
-                {% for val in half_modules %}
+            <!-- middle -->
+            <td width="100%" valign="top">
+                <!-- here? -->
+                <table border="0" cellpadding="0" cellspacing="0" width="100%">
                     <tr>
-                        <td valign="top">
-                            <!-- module: {{val.name}} -->
-                            {% start_module None val.description %}
-                                {% include_module val.name %}
-                            {% end_module %}
+                        <td>
+                            {% news all_news_items %}
                         </td>
                     </tr>
-                {% endfor %}
-            </table>
-        </td>
 
-        {% if skin.container.index_modules == 'right' %}
-            {% index_modules skin.container.index_modules %}
-            <!-- right index modules -->
-        {% else %}
-            <!-- right ordinary modules -->
-        {% endif %}
-    </tr>
-</table>
+                    <!-- modules follow -->
+                    {% for val in half_modules %}
+                        <tr>
+                            <td valign="top">
+                                <!-- module: {{val.name}} -->
+                                {% start_module None "" %} <!-- val.description -->
+                                    {% include_module val %} <!-- .name-->
+                                {% end_module %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </td>
 
-{% endblock content %}
+            {% if skin.container.index_modules == 'right' %}
+                {% index_modules skin.container.index_modules %}
+                <!-- right index modules -->
+            {% else %}
+                <!-- right ordinary modules -->
+            {% endif %}
+        </tr>
+    </table>
+{% display_bottom %}
