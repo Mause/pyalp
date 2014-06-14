@@ -7,13 +7,12 @@ from .rpc_client import get_interface
 import yaml
 
 
-game_ports = yaml.load(open(
-    join(HERE, 'game_ports.yaml')
+resource_load = lambda name: yaml.load(open(
+    join(HERE, 'resources', name)
 ))
 
-game_names = yaml.load(open(
-    join(HERE, 'game_names.yaml')
-))
+game_ports = resource_load('game_ports.yaml')
+game_names = resource_load('game_names.yaml')
 
 interface = get_interface()
 
