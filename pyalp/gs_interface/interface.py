@@ -27,12 +27,9 @@ class CouldNotReachServer(Exception):
 
 def calcqport(port, qgame):
     assert qgame, qgame
-    if qgame not in game_ports:
-        raise Exception("Game Type not a valid type: {}".format(
-            qgame
-        ))
-    else:
-        portdiff = game_ports[qgame]
+    assert qgame in game_ports, "Game Type not a valid type: {}".format(qgame)
+
+    portdiff = game_ports[qgame]
 
     # check out value:
     if portdiff[0] == '+':  # if it starts with a + or -, it's an offset.
@@ -62,17 +59,16 @@ def _query_server(
         address, port, protocol
     ))
 
-    if interface.protocol_exists(protocol):
-        return interface.query_server(
-            protocol,
-            address,
-            port,
-            get_players,
-            get_rules
-        )
-
-    else:
+    if not interface.protocol_exists(protocol):
         raise NonExistantProtocol(protocol)
+
+    return interface.query_server(
+        protocol,
+        address,
+        port,
+        get_players,
+        get_rules
+    )
 
 
 def queryServer(address, port, protocol, get_players=False, get_rules=False):
