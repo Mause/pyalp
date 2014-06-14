@@ -4,17 +4,17 @@ from __init__ import init
 init()
 
 from os.path import join, dirname
+import glob
 import logging
 import os
 import sys
 
 import zmq
+from zmq.auth.thread import ThreadAuthenticator as Authenticator
 
 from threaded import RPCServerThreaded as RPCServer
 from tinyrpc.protocols.jsonrpc import JSONRPCProtocol
 from tinyrpc.transports.zmq import ZmqServerTransport
-
-# from rpc_common import setup_auth
 
 logging.basicConfig(level=logging.DEBUG)
 logging.getLogger('zmq.auth').setLevel(logging.DEBUG)
@@ -30,6 +30,27 @@ os.environ.update({
 })
 importer.install(check_options=True)
 sys.path.insert(0, join(HERE, '..'))
+
+
+def setup_auth(ctx):
+    """
+    Creates
+
+    word of warning; if the return value from this function ever gets garbage
+    collected, the authenticator will get shut down, and authentication will
+    obviously cease to function
+    """
+
+    # Start an authenticator for this context.
+    auth = Authenticator(ctx, log=logging.getLogger('zmq.auth'))
+    auth.start()
+    # auth.allow('127.0.0.1')
+
+    # Tell the authenticator how to handle CURVE requests
+    assert glob.glob(join(KEYS_DIR, '*.key'))
+    auth.configure_curve(domain='*', location=KEYS_DIR)
+
+    return auth
 
 
 def setup_server(end_point):
