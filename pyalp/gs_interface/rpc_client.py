@@ -1,14 +1,5 @@
 # needed until we don't need to vendor tinyrpc anymore
-
-try:
-    from .init import init
-    from . import KEYS_DIR
-    from .rpc_common import setup_auth
-except (ImportError, SystemError):
-    from init import init
-    from __init__ import KEYS_DIR
-    from rpc_common import setup_auth
-
+from . import init, KEYS_DIR
 init()
 from os.path import join
 
@@ -29,7 +20,6 @@ def setup_client(end_point):
     logging.info('Setting up client')
 
     ctx = zmq.Context.instance()
-    # auth = setup_auth(ctx, True)
 
     socket = ctx.socket(zmq.REQ)
     socket.connect(end_point)
@@ -47,10 +37,6 @@ def setup_client(end_point):
         JSONRPCProtocol(),
         ZmqClientTransport(socket)
     )
-    # client.auth = auth
-
-    # import IPython
-    # IPython.embed()
 
     return client
 
@@ -70,8 +56,6 @@ def main():
     q = setup_client('tcp://127.0.0.1:5001')
     logging.info('Trying')
 
-    import pudb
-    pu.db
     print(q.batch_call([
         ('protocol_exists', ['halo']),
         ('protocol_exists', ['gamespy']),

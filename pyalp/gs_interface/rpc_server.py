@@ -1,6 +1,5 @@
 # needed until we don't need to vendor tinyrpc anymore
-from __init__ import init
-# from __init__ import KEYS_DIR
+from __init__ import init, KEYS_DIR
 init()
 
 from os.path import join, dirname
