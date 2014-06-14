@@ -54,21 +54,21 @@ def setup_auth(ctx):
 
 def setup_server(end_point):
     ctx = zmq.Context.instance()
-    # auth = setup_auth(ctx)
+    auth = setup_auth(ctx)
 
     socket = ctx.socket(zmq.ROUTER)
 
-    # socket.curve_publickey, socket.curve_secretkey = (
-    #     zmq.auth.load_certificate(
-    #         join(KEYS_DIR, 'server', "server.key_secret")
-    #     )
-    # )
+    socket.curve_publickey, socket.curve_secretkey = (
+        zmq.auth.load_certificate(
+            join(KEYS_DIR, "server.key_secret")
+        )
+    )
 
-    # socket.curve_server = True  # must come before bind
+    socket.curve_server = True  # must come before bind
     socket.bind(end_point)
 
     server = ZmqServerTransport(socket)
-    # server.auth = auth
+    server.auth = auth
 
     return server
 

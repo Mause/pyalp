@@ -4,7 +4,7 @@ init()
 from os.path import join
 
 import zmq
-# import zmq.auth
+import zmq.auth
 
 from tinyrpc.protocols.jsonrpc import JSONRPCProtocol
 from tinyrpc.transports.zmq import ZmqClientTransport
@@ -22,16 +22,15 @@ def setup_client(end_point):
     ctx = zmq.Context.instance()
 
     socket = ctx.socket(zmq.REQ)
+    socket.curve_publickey, socket.curve_secretkey = zmq.auth.load_certificate(
+        join(KEYS_DIR, "client.key_secret")
+    )
+    # The client must know the server's public key to make a CURVE connection.
+    socket.curve_serverkey, _ = zmq.auth.load_certificate(
+        join(KEYS_DIR, "server.key")
+    )
+
     socket.connect(end_point)
-
-    # socket.curve_publickey, socket.curve_secretkey = zmq.auth.load_certificate(
-    #     join(KEYS_DIR, 'client', "client.key_secret")
-    # )
-
-    # # The client must know the server's public key to make a CURVE connection.
-    # socket.curve_serverkey, _ = zmq.auth.load_certificate(
-    #     join(KEYS_DIR, 'server', "server.key")
-    # )
 
     client = RPCClient(
         JSONRPCProtocol(),
