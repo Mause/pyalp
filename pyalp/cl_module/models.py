@@ -20,6 +20,8 @@ class Module(models.Model):
     # `ordernum` int(10) unsigned NOT NULL default '0',
     ordernum = models.IntegerField()
 
+    # in the original php based implementation, you would set
+    # ordernum to 0 to disable a module. this is cleaner
     enabled = models.BooleanField(default=True)
 
     # `description` varchar(45) NOT NULL default '',
