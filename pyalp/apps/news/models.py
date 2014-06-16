@@ -31,7 +31,7 @@ class NewsItem(models.Model):
     news_article = models.CharField(max_length=1500)
 
     # hide_item BOOL NOT NULL,
-    hide_item = models.BooleanField()
+    hide_item = models.BooleanField(db_index=True)
 
     def __str__(self):
         return '{} by {}'.format(
