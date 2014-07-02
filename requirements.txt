@@ -2,9 +2,7 @@
 Django==1.6.5
 django-configurations==0.8
 django-vanilla-views==1.0.3
-django-jsonify==0.2.1
 bcrypt # always keep up to date
-django-mathfilters==0.2.1
 python-dateutil==2.2
 
 # debugging
@@ -47,5 +45,7 @@ South==0.8.4
 # for admindocs
 docutils==0.11
 
-# display stuff
+# display/template stuff
 markdown2==2.2.1
+django-jsonify==0.2.1
+django-mathfilters==0.2.1
