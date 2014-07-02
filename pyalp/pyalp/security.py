@@ -1,4 +1,7 @@
 from operator import attrgetter
+
+from django import forms
+
 from pyalp_page.universal import SecurityEnum
 
 
@@ -17,3 +20,17 @@ def current_security_level(user):
         max(in_groups) if in_groups
         else 0
     )
+
+
+class PrivSelect(forms.Select):
+    def __init__(self, *args, **kwargs):
+        from pyalp_translation.customization import custom_gettext
+        _ = custom_gettext('admin_schedule')
+
+        choices = (
+            (0, _('guest')),
+            (1, _('user')),
+            (2, _('administrator')),
+            (3, _('sadministrator'))
+        )
+        super().__init__(choices=choices, *args, **kwargs)
