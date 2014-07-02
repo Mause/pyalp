@@ -1,9 +1,11 @@
 from os.path import join, exists
 import importlib
+import json
 import logging
 import warnings
 from collections import OrderedDict
 
+import dateutil.parser
 from django.conf import settings
 
 from pyalp.php_load import load_php_file
@@ -30,11 +32,29 @@ class Config(object):
         self.modulelist = OrderedDict()
 
         self.load_skin_config()
+        self.load_config()
 
         assert isinstance(self.modulelist, OrderedDict), (
             'For ordering purposes, the module list must be an '
             'OrderedDict instance'
         )
+
+    def load_config(self):
+        path = join(settings.PROJECT_ROOT, 'pyalp', 'config.json')
+        with open(path) as fh:
+            contents = fh.readlines()
+
+        config = json.loads('\n'.join(
+            line
+            for line in map(str.lstrip, contents)
+            if not line.startswith('//')
+        ))
+
+        config.update({
+            'start': dateutil.parser.parse(config['datetimestart']),
+            'end': dateutil.parser.parse(config['datetimeend'])
+        })
+        self.config = config
 
     def load_skin_config(self):
         if exists(self.py_skin_config_path):

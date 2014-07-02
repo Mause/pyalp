@@ -27,18 +27,7 @@ def modules(request):
 
 
 def lan(request):
-    # TODO: have this load info from the db instead
-    path = join(settings.PROJECT_ROOT, 'pyalp', 'config.json')
-    with open(path) as fh:
-        contents = fh.readlines()
-
-    lan = json.loads('\n'.join(
-        line
-        for line in map(str.lstrip, contents)
-        if not line.startswith('//')
-    ))
-
-    return {'lan': lan}
+    return {'lan': get_config().config}
 
 
 def current_security_level(request):
