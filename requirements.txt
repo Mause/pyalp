@@ -5,6 +5,7 @@ django-vanilla-views==1.0.3
 django-jsonify==0.2.1
 bcrypt # always keep up to date
 django-mathfilters==0.2.1
+python-dateutil==2.2
 
 # debugging
 pudb==2014.1

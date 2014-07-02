@@ -1,12 +1,16 @@
-from django import template
 from django.template.loader import render_to_string
 
-register = template.Library()
 
-from music.models import Song
+from modules.module_utils import ModuleLibrary
+from ..models import Song
+
+register = ModuleLibrary()
 
 
-class ModMusicNode(template.Node):
+@register.module
+class ModMusicNode(object):
+    module_name = 'mod_music'
+
     def render(self, context):
         if Song.objects.filter(nowplaying=True).count() == 0:
             # random play mode
