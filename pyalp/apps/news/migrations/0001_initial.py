@@ -1,38 +1,29 @@
 # -*- coding: utf-8 -*-
-from south.utils import datetime_utils as datetime
-from south.db import db
-from south.v2 import SchemaMigration
-from django.db import models
+from __future__ import unicode_literals
+
+from django.db import models, migrations
+from django.conf import settings
 
 
-class Migration(SchemaMigration):
+class Migration(migrations.Migration):
 
-    def forwards(self, orm):
-        # Adding model 'NewsItem'
-        db.create_table('news_newsitem', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('itemtime', self.gf('django.db.models.fields.DateTimeField')()),
-            ('headline', self.gf('django.db.models.fields.CharField')(max_length=60)),
-            ('news_article', self.gf('django.db.models.fields.CharField')(max_length=1500)),
-            ('hide_item', self.gf('django.db.models.fields.BooleanField')()),
-        ))
-        db.send_create_signal('news', ['NewsItem'])
+    dependencies = [
+        migrations.swappable_dependency(settings.AUTH_USER_MODEL),
+    ]
 
-
-    def backwards(self, orm):
-        # Deleting model 'NewsItem'
-        db.delete_table('news_newsitem')
-
-
-    models = {
-        'news.newsitem': {
-            'Meta': {'object_name': 'NewsItem'},
-            'headline': ('django.db.models.fields.CharField', [], {'max_length': '60'}),
-            'hide_item': ('django.db.models.fields.BooleanField', [], {}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'itemtime': ('django.db.models.fields.DateTimeField', [], {}),
-            'news_article': ('django.db.models.fields.CharField', [], {'max_length': '1500'})
-        }
-    }
-
-    complete_apps = ['news']
+    operations = [
+        migrations.CreateModel(
+            name='NewsItem',
+            fields=[
+                ('id', models.AutoField(serialize=False, primary_key=True, auto_created=True, verbose_name='ID')),
+                ('itemtime', models.DateTimeField()),
+                ('headline', models.CharField(max_length=60)),
+                ('news_article', models.CharField(max_length=1500)),
+                ('hide_item', models.BooleanField(default=False, db_index=True)),
+                ('author', models.ForeignKey(to=settings.AUTH_USER_MODEL, editable=False)),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+    ]

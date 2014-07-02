@@ -1,38 +1,27 @@
 # -*- coding: utf-8 -*-
-from south.utils import datetime_utils as datetime
-from south.db import db
-from south.v2 import SchemaMigration
-from django.db import models
+from __future__ import unicode_literals
+
+from django.db import models, migrations
 
 
-class Migration(SchemaMigration):
+class Migration(migrations.Migration):
 
-    def forwards(self, orm):
-        # Adding model 'Module'
-        db.create_table('cl_module_module', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=45)),
-            ('ordernum', self.gf('django.db.models.fields.IntegerField')()),
-            ('description', self.gf('django.db.models.fields.CharField')(max_length=45)),
-            ('required', self.gf('django.db.models.fields.CharField')(max_length=45)),
-        ))
-        db.send_create_signal('cl_module', ['Module'])
+    dependencies = [
+    ]
 
-
-    def backwards(self, orm):
-        # Deleting model 'Module'
-        db.delete_table('cl_module_module')
-
-
-    models = {
-        'cl_module.module': {
-            'Meta': {'object_name': 'Module'},
-            'description': ('django.db.models.fields.CharField', [], {'max_length': '45'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '45'}),
-            'ordernum': ('django.db.models.fields.IntegerField', [], {}),
-            'required': ('django.db.models.fields.CharField', [], {'max_length': '45'})
-        }
-    }
-
-    complete_apps = ['cl_module']
+    operations = [
+        migrations.CreateModel(
+            name='Module',
+            fields=[
+                ('id', models.AutoField(serialize=False, primary_key=True, auto_created=True, verbose_name='ID')),
+                ('name', models.CharField(max_length=45)),
+                ('ordernum', models.IntegerField()),
+                ('enabled', models.BooleanField(default=True)),
+                ('description', models.CharField(max_length=45)),
+                ('required', models.CharField(max_length=45, blank=True, null=True)),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+    ]
