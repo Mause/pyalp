@@ -10,7 +10,7 @@ python-dateutil==2.2
 # debugging
 pudb==2014.1
 django-debug-toolbar==1.2.1
-django-debug-toolbar-template-timings==0.6.1
+django-debug-toolbar-template-timings==0.6.4
 django-extensions==1.2.5
 
 # assets
