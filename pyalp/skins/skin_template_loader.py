@@ -3,7 +3,7 @@ from os.path import join
 from django.conf import settings
 from django.template.loaders.app_directories import Loader as AppDirLoader
 
-from pyalp.skin import get_skin
+from . import get_skin
 
 
 class Loader(AppDirLoader):

@@ -9,7 +9,7 @@ from django.core.files import File
 from django.template.context import Context
 from django.template.loader import get_template_from_string
 
-from pyalp.skin import get_skin
+from skins import get_skin
 
 
 class SmartFileStorage(FileSystemStorage):

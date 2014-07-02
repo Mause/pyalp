@@ -1,6 +1,6 @@
 from os.path import exists, join
 
-from pyalp.skin import get_skin
+from skins import get_skin
 from pyalp.security import current_security_level
 
 

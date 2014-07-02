@@ -7,7 +7,7 @@ from django.conf import settings
 
 from cl_module.cl_module import ModuleManager
 from flags.registry import get_flag_registry
-from pyalp.skin import get_skin
+from skins import get_skin
 
 
 def app_name(request):

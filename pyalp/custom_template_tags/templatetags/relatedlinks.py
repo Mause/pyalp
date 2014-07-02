@@ -1,7 +1,7 @@
 from django import template
 from django.template.loader import render_to_string
 
-from pyalp.skin import get_skin
+from skins import get_skin
 
 register = template.Library()
 
