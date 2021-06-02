@@ -46,6 +46,6 @@ South==0.8.4
 docutils==0.11
 
 # display/template stuff
-markdown2==2.2.1
+markdown2==2.4.0
 django-jsonify==0.2.1
 django-mathfilters==0.2.1
