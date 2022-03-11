@@ -12,7 +12,7 @@ django-debug-toolbar-template-timings==0.6.4
 django-extensions==1.2.5
 
 # assets
-pillow==2.2.2
+pillow==9.0.1
 django-pipeline==1.3.19
 
 # testing
